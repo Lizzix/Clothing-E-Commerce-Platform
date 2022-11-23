@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Discount {
+  discount_id Int           @id @unique(map: "sqlite_autoindex_Discount_1") @default(autoincrement())
+  name        String
+  format      String
+  scope       String
+  type        String
+  value       Int
+  available   Boolean
+  startAt     DateTime
+  endAt       DateTime
+  product_id  Int
+  seller_id   Int
+  User        User          @relation(fields: [seller_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  Product     Product       @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction)
+  Order       Order[]
+  User_Coupon User_Coupon[]
+}
+
+model Order {
+  order_id                   Int          @id @unique(map: "sqlite_autoindex_Order_1") @default(autoincrement())
+  buyer_id                   Int
+  seller_id                  Int
+  total_price                Int
+  createAt                   DateTime
+  updateAt                   DateTime
+  status                     String
+  discount_id                Int?
+  Discount                   Discount?    @relation(fields: [discount_id], references: [discount_id], onDelete: NoAction, onUpdate: NoAction)
+  User_Order_seller_idToUser User         @relation("Order_seller_idToUser", fields: [seller_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  User_Order_buyer_idToUser  User         @relation("Order_buyer_idToUser", fields: [buyer_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  Order_Item                 Order_Item[]
+}
+
+model Order_Item {
+  order_id     Int
+  product_id   Int
+  variation_id Int
+  quantity     Int
+  Variation    Variation @relation(fields: [variation_id], references: [variation_id], onDelete: NoAction, onUpdate: NoAction)
+  Product      Product   @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction)
+  Order        Order     @relation(fields: [order_id], references: [order_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([order_id, product_id, variation_id])
+}
+
+model Product {
+  product_id  Int          @id @unique(map: "sqlite_autoindex_Product_1") @default(autoincrement())
+  name        String
+  description String
+  picture     String
+  price       Int
+  available   Boolean
+  isOnSale    Boolean
+  startAt     DateTime
+  endAt       DateTime
+  seller_id   Int
+  User        User         @relation(fields: [seller_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  Discount    Discount[]
+  Order_Item  Order_Item[]
+  User_Sells  User_Sells[]
+  Variation   Variation[]
+}
+
+model User {
+  user_id                     Int           @id @unique(map: "sqlite_autoindex_User_1") @default(autoincrement())
+  email                       String        @unique(map: "sqlite_autoindex_User_2")
+  password                    String
+  name                        String
+  phone                       String        @unique(map: "sqlite_autoindex_User_3")
+  Discount                    Discount[]
+  Order_Order_seller_idToUser Order[]       @relation("Order_seller_idToUser")
+  Order_Order_buyer_idToUser  Order[]       @relation("Order_buyer_idToUser")
+  Product                     Product[]
+  User_Coupon                 User_Coupon[]
+  User_Sells                  User_Sells[]
+}
+
+model User_Coupon {
+  user_id     Int
+  discount_id Int
+  isUsed      Boolean
+  Discount    Discount @relation(fields: [discount_id], references: [discount_id], onDelete: NoAction, onUpdate: NoAction)
+  User        User     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([user_id, discount_id])
+}
+
+model User_Sells {
+  seller_id  Int
+  product_id Int
+  User       User    @relation(fields: [seller_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  Product    Product @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([seller_id, product_id])
+}
+
+model Variation {
+  variation_id Int          @id @unique(map: "sqlite_autoindex_Variation_1") @default(autoincrement())
+  product_id   Int
+  color_id     Int
+  color_name   String
+  size_id      Int
+  size_name    String
+  quantity     Int
+  Product      Product      @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction)
+  Order_Item   Order_Item[]
+}
