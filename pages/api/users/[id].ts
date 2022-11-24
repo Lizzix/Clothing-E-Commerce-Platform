@@ -3,8 +3,6 @@ import prisma from '../../../lib/prisma';
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 	const user_id = req.query.id;
-
-
 	if (req.method === 'GET') {
 		handleGET(user_id, res);
 	} else {
