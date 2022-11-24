@@ -9,15 +9,37 @@ export default async function handle(
 ) {
 	if (req.method === "GET") {
 		const user = await prisma.user.findUnique({
-			where: { user_id: Number(req.query.id) }
+			where: { user_id: Number(req.body.id) }
 		});
-		res.json(user);
+		res.json({
+			status: 0,
+			message: "success",
+			data: {
+				id: user.user_id,
+				name: user.name,
+				email: user.email,
+				phone: user.phone,
+			}
+		});
 	} else if (req.method === "PATCH") {
+		const { name, phone } = req.body;
 		const user = await prisma.user.update({
-			where: { user_id: Number(req.query.id) },
-			data: req.body,
+			where: { user_id: Number(req.body.id) },
+			data: {
+				name: name,
+				phone: phone
+			}
 		});
-		res.json(user);
+		res.json({
+			status: 0,
+			message: "success",
+			data: {
+				id: user.user_id,
+				name: user.name,
+				email: user.email,
+				phone: user.phone,
+			}
+		});
 	} else {
 		throw new Error(
 			`The HTTP ${req.method} method is not supported at this route.`

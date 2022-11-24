@@ -7,8 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Discount {
-  discount_id Int           @id @unique(map: "sqlite_autoindex_Discount_1") @default(autoincrement())
+model Activity {
+  activity_id Int           @id @unique(map: "sqlite_autoindex_Activity_1") @default(autoincrement())
   name        String
   format      String
   scope       String
@@ -33,8 +33,8 @@ model Order {
   createAt                   DateTime
   updateAt                   DateTime
   status                     String
-  discount_id                Int?
-  Discount                   Discount?    @relation(fields: [discount_id], references: [discount_id], onDelete: NoAction, onUpdate: NoAction)
+  activity_id                Int?
+  Activity                   Activity?    @relation(fields: [activity_id], references: [activity_id], onDelete: NoAction, onUpdate: NoAction)
   User_Order_seller_idToUser User         @relation("Order_seller_idToUser", fields: [seller_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
   User_Order_buyer_idToUser  User         @relation("Order_buyer_idToUser", fields: [buyer_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
   Order_Item                 Order_Item[]
@@ -64,7 +64,7 @@ model Product {
   endAt       DateTime
   seller_id   Int
   User        User         @relation(fields: [seller_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
-  Discount    Discount[]
+  Activity    Activity[]
   Order_Item  Order_Item[]
   User_Sells  User_Sells[]
   Variation   Variation[]
@@ -76,7 +76,7 @@ model User {
   password                    String
   name                        String
   phone                       String        @unique(map: "sqlite_autoindex_User_3")
-  Discount                    Discount[]
+  Activity                    Activity[]
   Order_Order_seller_idToUser Order[]       @relation("Order_seller_idToUser")
   Order_Order_buyer_idToUser  Order[]       @relation("Order_buyer_idToUser")
   Product                     Product[]
@@ -86,12 +86,12 @@ model User {
 
 model User_Coupon {
   user_id     Int
-  discount_id Int
+  activity_id Int
   isUsed      Boolean
-  Discount    Discount @relation(fields: [discount_id], references: [discount_id], onDelete: NoAction, onUpdate: NoAction)
+  Activity    Activity @relation(fields: [activity_id], references: [activity_id], onDelete: NoAction, onUpdate: NoAction)
   User        User     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@id([user_id, discount_id])
+  @@id([user_id, activity_id])
 }
 
 model User_Sells {
@@ -110,7 +110,7 @@ model Variation {
   color_name   String
   size_id      Int
   size_name    String
-  quantity     Int
+  inventory    Int
   Product      Product      @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction)
   Order_Item   Order_Item[]
 }
