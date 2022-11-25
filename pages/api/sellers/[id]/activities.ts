@@ -6,7 +6,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 	const id = req.query.id;
 	if (req.method === 'GET') {
 		const discount = await prisma.discount.findMany({
-			where: { seller_id: Number(id), format: "ACTIVITY" },
+			where: { sellerId: Number(id), format: "ACTIVITY" },
 		});
 		res.json({
 			status: 0,

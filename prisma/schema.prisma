@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Discount {
-  discount_id Int           @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   name        String
   format      String
   scope       String
@@ -17,43 +17,43 @@ model Discount {
   available   Boolean
   startAt     DateTime
   endAt       DateTime
-  product_id  Int?
-  seller_id   Int
-  Product     Product?      @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction)
-  User        User          @relation(fields: [seller_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  productId   Int?
+  sellerId    Int
+  Product     Product?      @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User        User          @relation(fields: [sellerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Order       Order[]
   User_Coupon User_Coupon[]
 }
 
 model Order {
-  order_id                   Int          @id @default(autoincrement())
-  buyer_id                   Int
-  seller_id                  Int
-  total_price                Int
-  createAt                   DateTime
-  updateAt                   DateTime
-  status                     String
-  discount_id                Int?
-  Discount                   Discount?    @relation(fields: [discount_id], references: [discount_id], onDelete: NoAction, onUpdate: NoAction)
-  User_Order_seller_idToUser User         @relation("Order_seller_idToUser", fields: [seller_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
-  User_Order_buyer_idToUser  User         @relation("Order_buyer_idToUser", fields: [buyer_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
-  Order_Item                 Order_Item[]
+  id                        Int          @id @default(autoincrement())
+  buyerId                   Int
+  sellerId                  Int
+  totalPrice                Int
+  createAt                  DateTime
+  updateAt                  DateTime
+  status                    String
+  discountId                Int?
+  Discount                  Discount?    @relation(fields: [discountId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User_Order_sellerIdToUser User         @relation("Order_sellerIdToUser", fields: [sellerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User_Order_buyerIdToUser  User         @relation("Order_buyerIdToUser", fields: [buyerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Order_Item                Order_Item[]
 }
 
 model Order_Item {
-  order_id     Int
-  product_id   Int
-  variation_id Int
-  quantity     Int
-  Order        Order     @relation(fields: [order_id], references: [order_id], onDelete: NoAction, onUpdate: NoAction)
-  Product      Product   @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction)
-  Variation    Variation @relation(fields: [variation_id], references: [variation_id], onDelete: NoAction, onUpdate: NoAction)
+  orderId     Int
+  productId   Int
+  variationId Int
+  quantity    Int
+  Order       Order     @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Product     Product   @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Variation   Variation @relation(fields: [variationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@id([order_id, product_id, variation_id])
+  @@id([orderId, productId, variationId])
 }
 
 model Product {
-  product_id  Int          @id @unique(map: "sqlite_autoindex_Product_1") @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   name        String
   description String
   picture     String
@@ -62,44 +62,44 @@ model Product {
   isOnSale    Boolean
   startAt     DateTime
   endAt       DateTime
-  seller_id   Int
-  User        User         @relation(fields: [seller_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  sellerId    Int
+  User        User         @relation(fields: [sellerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Discount    Discount[]
   Order_Item  Order_Item[]
   Variation   Variation[]
 }
 
 model User {
-  user_id                     Int           @id @unique(map: "sqlite_autoindex_User_1") @default(autoincrement())
-  email                       String        @unique(map: "sqlite_autoindex_User_2")
-  password                    String
-  name                        String
-  phone                       String        @unique(map: "sqlite_autoindex_User_3")
-  Discount                    Discount[]
-  Order_Order_seller_idToUser Order[]       @relation("Order_seller_idToUser")
-  Order_Order_buyer_idToUser  Order[]       @relation("Order_buyer_idToUser")
-  Product                     Product[]
-  User_Coupon                 User_Coupon[]
+  id                         Int           @id @default(autoincrement())
+  email                      String        @unique(map: "sqlite_autoindex_User_2")
+  password                   String
+  name                       String
+  phone                      String        @unique(map: "sqlite_autoindex_User_3")
+  Discount                   Discount[]
+  Order_Order_sellerIdToUser Order[]       @relation("Order_sellerIdToUser")
+  Order_Order_buyerIdToUser  Order[]       @relation("Order_buyerIdToUser")
+  Product                    Product[]
+  User_Coupon                User_Coupon[]
 }
 
 model User_Coupon {
-  user_id     Int
-  discount_id Int
-  isUsed      Boolean
-  User        User     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
-  Discount    Discount @relation(fields: [discount_id], references: [discount_id], onDelete: NoAction, onUpdate: NoAction)
+  userId     Int
+  discountId Int
+  isUsed     Boolean
+  User       User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Discount   Discount @relation(fields: [discountId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@id([user_id, discount_id])
+  @@id([userId, discountId])
 }
 
 model Variation {
-  variation_id Int          @id @unique(map: "sqlite_autoindex_Variation_1") @default(autoincrement())
-  product_id   Int
-  color_id     Int
-  color_name   String
-  size_id      Int
-  size_name    String
-  inventory    Int
-  Product      Product      @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction)
-  Order_Item   Order_Item[]
+  id         Int          @id @default(autoincrement())
+  productId  Int
+  colorId    Int
+  colorName  String
+  sizeId     Int
+  sizeName   String
+  inventory  Int
+  Product    Product      @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Order_Item Order_Item[]
 }

@@ -10,13 +10,13 @@ export default async function handle(
 	if (req.method === "GET") {
 		// TODO: get self data
 		const user = await prisma.user.findUnique({
-			where: { user_id: Number(req.query.id) }
+			where: { id: Number(req.query.id) }
 		});
 		res.json({
 			status: 0,
 			message: "success",
 			data: {
-				id: user.user_id,
+				id: user.id,
 				name: user.name,
 				email: user.email,
 				phone: user.phone,
@@ -25,7 +25,7 @@ export default async function handle(
 	} else if (req.method === "PATCH") {
 		const { name, phone } = req.query;
 		const user = await prisma.user.update({
-			where: { user_id: Number(req.body.id) },
+			where: { id: Number(req.body.id) },
 			data: {
 				name: String(name),
 				phone: String(phone)
@@ -35,7 +35,7 @@ export default async function handle(
 			status: 0,
 			message: "success",
 			data: {
-				id: user.user_id,
+				id: user.id,
 				name: user.name,
 				email: user.email,
 				phone: user.phone,

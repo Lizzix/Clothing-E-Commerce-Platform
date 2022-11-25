@@ -17,7 +17,7 @@ export default async function handle(
 		status: 0,
 		message: "success",
 		data: {
-			id: result.user_id,
+			id: result.id,
 			token: "token", // TODO: JWT
 		}
 	});

@@ -51,6 +51,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			});
 		});
 		res.json({
+			req: req.query,
 			status: 0,
 			message: "success",
 			data: {

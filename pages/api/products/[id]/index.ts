@@ -11,7 +11,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 	} else if (req.method === "PATCH") {
 		const { id, available } = req.query;
 		const result = await prisma.product.update({
-			where: { product_id: Number(id), },
+			where: { id: Number(id), },
 			data: { available: (available === 'true') },
 		});
 		handleGET(id, res);
@@ -23,32 +23,32 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 }
 
 export async function handleGET(id: string | string[], res: NextApiResponse<any>) {
-	const result = await prisma.product.findUnique({
-		where: { product_id: Number(id), },
+	const product = await prisma.product.findUnique({
+		where: { id: Number(id), },
 	});
 	const variations = await prisma.variation.findMany({
-		where: { product_id: Number(id), },
+		where: { productId: Number(id), },
 	});
 	var colors = [];
 	var sizes = [];
 	var inventories = [];
 	variations.forEach(e => {
 		colors.push({
-			id: e.color_id,
-			name: e.color_name
+			id: e.colorId,
+			name: e.colorName
 		});
 		sizes.push({
-			id: e.size_id,
-			name: e.size_name
+			id: e.sizeId,
+			name: e.sizeName
 		});
 		inventories.push({
 			color: {
-				id: e.color_id,
-				name: e.color_name
+				id: e.colorId,
+				name: e.colorName
 			},
 			size: {
-				id: e.size_id,
-				name: e.size_name
+				id: e.sizeId,
+				name: e.sizeName
 			},
 			inventory: e.inventory
 		});
@@ -57,18 +57,18 @@ export async function handleGET(id: string | string[], res: NextApiResponse<any>
 		status: 0,
 		message: "success",
 		data: {
-			id: result.product_id,
-			name: result.name,
-			description: result.description,
-			picture: result.picture,
+			id: product.id,
+			name: product.name,
+			description: product.description,
+			picture: product.picture,
 			colors: colors,
 			sizes: sizes,
-			price: result.price,
-			available: result.available,
+			price: product.price,
+			available: product.available,
 			inventories: inventories,
-			startAt: result.startAt,
-			endAt: result.endAt,
-			sellerId: result.seller_id
+			startAt: product.startAt,
+			endAt: product.endAt,
+			sellerId: product.sellerId
 		}
 	});
 }
