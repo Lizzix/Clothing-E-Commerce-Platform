@@ -6,14 +6,13 @@ import prisma from '../../../../lib/prisma';
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 	// TODO:
 	if (req.method === "GET") {
-		const id = req.body.id;
+		const id = req.query.id;
 		handleGET(id, res);
 	} else if (req.method === "PATCH") {
-		const { id } = req.body;
-		const available = req.body;
+		const { id, available } = req.query;
 		const result = await prisma.product.update({
 			where: { product_id: Number(id), },
-			data: { available: available },
+			data: { available: (available === 'true') },
 		});
 		handleGET(id, res);
 	} else {

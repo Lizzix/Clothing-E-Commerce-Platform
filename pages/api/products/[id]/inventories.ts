@@ -5,14 +5,13 @@ import prisma from '../../../../lib/prisma';
 // PATCH /api/products/:id/inventories (Update the product's inventory)
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 	// TODO:
-	const product_id = req.body.id;
 	if (req.method === "PATCH") {
-		const { color_id, size_id, inventory } = req.body;
+		const { id, colorId, sizeId, inventory } = req.query;
 		const variation = await prisma.variation.findMany({
 			where: {
-				color_id: color_id,
-				size_id: size_id,
-				product_id: product_id
+				color_id: Number(colorId),
+				size_id: Number(sizeId),
+				product_id: Number(id)
 			}
 		});
 		const result = await prisma.variation.update({
@@ -22,10 +21,10 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			data: { inventory: Number(inventory) }
 		});
 		const product = await prisma.product.findUnique({
-			where: { product_id: Number(product_id), },
+			where: { product_id: Number(id), },
 		});
 		const variations = await prisma.variation.findMany({
-			where: { product_id: Number(product_id), },
+			where: { product_id: Number(id), },
 		});
 		var colors = [];
 		var sizes = [];

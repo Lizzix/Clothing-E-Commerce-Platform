@@ -7,13 +7,13 @@ export default async function handle(
 	res: NextApiResponse
 ) {
 	if (req.method === 'POST') {
-		const { name, email, password, phone } = req.body;
+		const { name, email, password, phone } = req.query;
 		const result = await prisma.user.create({
 			data: {
-				name: name,
-				email: email,
-				password: password,
-				phone: phone
+				name: String(name),
+				email: String(email),
+				password: String(password),
+				phone: String(phone)
 			},
 		});
 		res.json({
@@ -26,6 +26,7 @@ export default async function handle(
 				phone: result.phone,
 			}
 		});
+
 	} else {
 		throw new Error(
 			`The HTTP ${req.method} method is not supported at this route.`

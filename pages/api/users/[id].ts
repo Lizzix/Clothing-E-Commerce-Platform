@@ -15,7 +15,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 				name: user.name,
 				email: user.email,
 				phone: user.phone,
-			}
+			},
 		});
 	} else {
 		throw new Error(
