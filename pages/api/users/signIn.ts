@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
 
-// POST /api/users/signIn (User sign in)
+// POST /api/users/signIn (user sign in)
 export default async function handle(
 	req: NextApiRequest,
 	res: NextApiResponse

@@ -1,10 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { serialize } from 'v8';
 import prisma from '../../../../lib/prisma';
 
 // PATCH /api/products/:id/inventories (Update the product's inventory)
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-	// TODO:
 	if (req.method === "PATCH") {
 		const { id, colorId, sizeId, inventory } = req.query;
 		const variation = await prisma.variation.findMany({
@@ -14,6 +12,12 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 				productId: Number(id)
 			}
 		});
+		if (variation.length === 0) {
+			res.json({
+				status: 1,
+				message: 'product does not exist'
+			});
+		}
 		const result = await prisma.variation.update({
 			where: {
 				id: variation[0].id
@@ -51,7 +55,6 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			});
 		});
 		res.json({
-			req: req.query,
 			status: 0,
 			message: "success",
 			data: {
@@ -69,7 +72,6 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 				sellerId: product.sellerId
 			}
 		});
-
 	} else {
 		throw new Error(
 			`The HTTP ${req.method} method is not supported at this route.`

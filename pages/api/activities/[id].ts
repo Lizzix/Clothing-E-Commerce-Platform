@@ -5,18 +5,25 @@ import prisma from '../../../lib/prisma';
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 	const { id, available } = req.query;
 	if (req.method === 'PATCH') {
-		const result = await prisma.discount.update({
-			where: { discount_id: Number(id) },
+		const test = await prisma.discount.findUnique({
+			where: { id: Number(id) },
+		});
+		if (test === null) {
+			res.json({
+				status: 1,
+				message: 'activity does not exist'
+			});
+		}
+		const activity = await prisma.discount.update({
+			where: { id: Number(id) },
 			data: { available: (available === 'true') },
 		});
-		const activity = await prisma.discount.findUnique({
-			where: { discount_id: Number(id) },
-		});
+
 		res.json({
 			status: 0,
 			message: "success",
 			data: {
-				id: activity.discount_id,
+				id: activity.id,
 				name: activity.name,
 				scope: activity.scope,
 				type: activity.type,
@@ -24,8 +31,8 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 				available: activity.available,
 				startAt: activity.startAt,
 				endAt: activity.endAt,
-				productId: activity.product_id,
-				sellerId: activity.seller_id,
+				productId: activity.productId,
+				sellerId: activity.sellerId,
 			}
 		});
 	} else {

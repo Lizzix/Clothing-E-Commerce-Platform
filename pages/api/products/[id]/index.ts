@@ -4,12 +4,20 @@ import prisma from '../../../../lib/prisma';
 // GET   /api/products/:id (get a product)
 // PATCH /api/products/:id (Update the product)
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-	// TODO:
 	if (req.method === "GET") {
 		const id = req.query.id;
 		handleGET(id, res);
 	} else if (req.method === "PATCH") {
 		const { id, available } = req.query;
+		const product = await prisma.product.findUnique({
+			where: { id: Number(id), },
+		});
+		if (product === null) {
+			res.json({
+				status: 1,
+				message: 'product does not exist'
+			});
+		}
 		const result = await prisma.product.update({
 			where: { id: Number(id), },
 			data: { available: (available === 'true') },
@@ -26,6 +34,12 @@ export async function handleGET(id: string | string[], res: NextApiResponse<any>
 	const product = await prisma.product.findUnique({
 		where: { id: Number(id), },
 	});
+	if (product === null) {
+		res.json({
+			status: 1,
+			message: 'product does not exist'
+		});
+	}
 	const variations = await prisma.variation.findMany({
 		where: { productId: Number(id), },
 	});
