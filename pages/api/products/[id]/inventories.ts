@@ -9,43 +9,43 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 		const { id, colorId, sizeId, inventory } = req.query;
 		const variation = await prisma.variation.findMany({
 			where: {
-				color_id: Number(colorId),
-				size_id: Number(sizeId),
-				product_id: Number(id)
+				colorId: Number(colorId),
+				sizeId: Number(sizeId),
+				productId: Number(id)
 			}
 		});
 		const result = await prisma.variation.update({
 			where: {
-				variation_id: variation[0].variation_id
+				id: variation[0].id
 			},
 			data: { inventory: Number(inventory) }
 		});
 		const product = await prisma.product.findUnique({
-			where: { product_id: Number(id), },
+			where: { id: Number(id), },
 		});
 		const variations = await prisma.variation.findMany({
-			where: { product_id: Number(id), },
+			where: { productId: Number(id), },
 		});
 		var colors = [];
 		var sizes = [];
 		var inventories = [];
 		variations.forEach(e => {
 			colors.push({
-				id: e.color_id,
-				name: e.color_name
+				id: e.colorId,
+				name: e.colorName
 			});
 			sizes.push({
-				id: e.size_id,
-				name: e.size_name
+				id: e.sizeId,
+				name: e.sizeName
 			});
 			inventories.push({
 				color: {
-					id: e.color_id,
-					name: e.color_name
+					id: e.colorId,
+					name: e.colorName
 				},
 				size: {
-					id: e.size_id,
-					name: e.size_name
+					id: e.sizeId,
+					name: e.sizeName
 				},
 				inventory: e.inventory
 			});
@@ -55,7 +55,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			status: 0,
 			message: "success",
 			data: {
-				id: product.product_id,
+				id: product.id,
 				name: product.name,
 				description: product.description,
 				picture: product.picture,
@@ -66,7 +66,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 				inventories: inventories,
 				startAt: product.startAt,
 				endAt: product.endAt,
-				sellerId: product.seller_id
+				sellerId: product.sellerId
 			}
 		});
 

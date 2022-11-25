@@ -19,6 +19,7 @@ model Discount {
   endAt       DateTime
   productId   Int?
   sellerId    Int
+  amount      Int
   Product     Product?      @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   User        User          @relation(fields: [sellerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Order       Order[]
