@@ -14,12 +14,12 @@ model Discount {
   scope       String
   type        String
   value       Int
-  amount      Int
   available   Boolean
   startAt     DateTime
   endAt       DateTime
   productId   Int?
   sellerId    Int
+  amount      Int
   Product     Product?      @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   User        User          @relation(fields: [sellerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Order       Order[]
@@ -31,8 +31,8 @@ model Order {
   buyerId                   Int
   sellerId                  Int
   totalPrice                Int
-  createAt                  DateTime
-  updateAt                  DateTime
+  createdAt                 DateTime
+  updatedAt                 DateTime
   status                    String
   discountId                Int?
   Discount                  Discount?    @relation(fields: [discountId], references: [id], onDelete: NoAction, onUpdate: NoAction)
