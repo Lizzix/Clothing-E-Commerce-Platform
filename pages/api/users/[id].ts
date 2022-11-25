@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-	const user_id = req.body.id;
+	const user_id = req.query.id;
 	if (req.method === 'GET') {
 		const user = await prisma.user.findUnique({
 			where: { user_id: Number(user_id) },

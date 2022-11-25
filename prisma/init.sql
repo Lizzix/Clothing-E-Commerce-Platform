@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS `User`;
 DROP TABLE IF EXISTS `Product`;
 DROP TABLE IF EXISTS `Variation`;
-DROP TABLE IF EXISTS `Activity`;
+DROP TABLE IF EXISTS `Discount`;
 DROP TABLE IF EXISTS `User_Coupon`;
 DROP TABLE IF EXISTS `User_Sells`;
 DROP TABLE IF EXISTS `Order`;
@@ -46,8 +46,8 @@ CREATE TABLE `Variation`(
 	PRIMARY KEY("variation_id")
 );
 
-CREATE TABLE `Activity`(
-	activity_id		INTEGER			UNIQUE NOT NULL,
+CREATE TABLE `Discount`(
+	discount_id		INTEGER			UNIQUE NOT NULL,
 	name			VARCHAR(32) 	NOT NULL,
 	format			VARCHAR(8)		NOT NULL CHECK( format IN ('ACTIVITY', 'COUPON') ),
 	scope			VARCHAR(8)		NOT NULL CHECK( scope IN ('STORE','PRODUCT') ),
@@ -56,28 +56,20 @@ CREATE TABLE `Activity`(
 	available 		BOOLEAN			NOT NULL,
 	startAt 		TIMESTAMP		NOT NULL,
 	endAt 			TIMESTAMP		NOT NULL,
-	product_id 		INTEGER			NOT NULL,
+	product_id 		INTEGER			,
 	seller_id		INTEGER			NOT NULL,
 	FOREIGN KEY("product_id") REFERENCES `Product`("product_id"),
 	FOREIGN KEY("seller_id") REFERENCES `User`("user_id"),
-	PRIMARY KEY("activity_id")
+	PRIMARY KEY("discount_id")
 );
 
 CREATE TABLE `User_Coupon`(
 	user_id			INTEGER			NOT NULL,
-	activity_id		INTEGER			NOT NULL,
+	discount_id		INTEGER			NOT NULL,
 	isUsed			BOOLEAN			NOT NULL,
 	FOREIGN KEY("user_id") REFERENCES `User`("user_id"),
-	FOREIGN KEY("activity_id") REFERENCES `Activity`("activity_id"),
-	PRIMARY KEY("user_id", "activity_id")
-);
-
-CREATE TABLE `User_Sells`(
-	seller_id		INTEGER			NOT NULL,
-	product_id		INTEGER			NOT NULL,
-	FOREIGN KEY("product_id") REFERENCES `Product`("product_id"),
-	FOREIGN KEY("seller_id") REFERENCES `User`("user_id"),
-	PRIMARY KEY("seller_id", "product_id")
+	FOREIGN KEY("discount_id") REFERENCES `Discount`("discount_id"),
+	PRIMARY KEY("user_id", "discount_id")
 );
 
 CREATE TABLE `Order`(
@@ -88,10 +80,10 @@ CREATE TABLE `Order`(
 	createAt		TIMESTAMP		NOT NULL,
 	updateAt		TIMESTAMP		NOT NULL,
 	status			VARCHAR(16)		NOT NULL CHECK( status IN ('CHECKING', 'ESTABLISHED', 'DEALING', 'SENDED', 'FINISHED', 'CANCELED') ),
-	activity_id		INTEGER			,
+	discount_id		INTEGER			,
 	FOREIGN KEY("buyer_id") REFERENCES `User`("user_id"),
 	FOREIGN KEY("seller_id") REFERENCES `User`("user_id"),
-	FOREIGN KEY("activity_id") REFERENCES `Activity`("activity_id"),
+	FOREIGN KEY("discount_id") REFERENCES `Discount`("discount_id"),
 	PRIMARY KEY("order_id")
 );
 
