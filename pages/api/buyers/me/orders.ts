@@ -7,10 +7,10 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 	const my_user_id = 1;
 	// TODO: update for me
 	if (req.method === 'GET') {
-		let order_list;
 		const orders = await prisma.order.findMany({
 			where: { buyerId: my_user_id },
 		});
+		let order_list;
 		for (const o of orders) {
 			const items = await prisma.order_Item.findMany({
 				where: { orderId: o.id },
