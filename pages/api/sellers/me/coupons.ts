@@ -1,10 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../../lib/prisma';
 
-
-
-const SCOPE = ['PRODUCT', 'STORE'];
-const TYPE = ['MULTIPLE', 'MINUS'];
+const TYPE = ['MINUS', 'MULTIPLY'];
 // POST /api/sellers/me/coupons (Create coupon)
 // GET  /api/sellers/me/coupons (Get my coupons)
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
@@ -12,7 +9,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 	// TODO: update for me
 	if (req.method === 'GET') {
 		const coupons = await prisma.discount.findMany({
-			where: { sellerId: my_user_id },
+			where: { sellerId: my_user_id, format: "COUPON" },
 		});
 		res.json({
 			status: 0,

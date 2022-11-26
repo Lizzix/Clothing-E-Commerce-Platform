@@ -14,7 +14,7 @@ model Discount {
   scope       String
   type        String
   value       Int
-  amount      Int
+  amount      Int?
   available   Boolean
   startAt     DateTime
   endAt       DateTime
