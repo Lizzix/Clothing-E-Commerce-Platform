@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Discount {
-  id          Int           @id @default(autoincrement())
+  id          Int           @id @unique(map: "sqlite_autoindex_Discount_1") @default(autoincrement())
   name        String
   format      String
   scope       String
@@ -20,14 +20,14 @@ model Discount {
   endAt       DateTime
   productId   Int?
   sellerId    Int
-  Product     Product?      @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   User        User          @relation(fields: [sellerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Product     Product?      @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Order       Order[]
   User_Coupon User_Coupon[]
 }
 
 model Order {
-  id                        Int          @id @default(autoincrement())
+  id                        Int          @id @unique(map: "sqlite_autoindex_Order_1") @default(autoincrement())
   buyerId                   Int
   sellerId                  Int
   totalPrice                Int
@@ -46,15 +46,15 @@ model Order_Item {
   productId   Int
   variationId Int
   quantity    Int
-  Order       Order     @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Product     Product   @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Variation   Variation @relation(fields: [variationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Product     Product   @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Order       Order     @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@id([orderId, productId, variationId])
 }
 
 model Product {
-  id          Int          @id @default(autoincrement())
+  id          Int          @id @unique(map: "sqlite_autoindex_Product_1") @default(autoincrement())
   name        String
   description String
   picture     String
@@ -71,7 +71,7 @@ model Product {
 }
 
 model User {
-  id                         Int           @id @default(autoincrement())
+  id                         Int           @id @unique(map: "sqlite_autoindex_User_1") @default(autoincrement())
   email                      String        @unique(map: "sqlite_autoindex_User_2")
   password                   String
   name                       String
@@ -87,14 +87,14 @@ model User_Coupon {
   userId     Int
   discountId Int
   isUsed     Boolean
-  User       User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Discount   Discount @relation(fields: [discountId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User       User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@id([userId, discountId])
 }
 
 model Variation {
-  id         Int          @id @default(autoincrement())
+  id         Int          @id @unique(map: "sqlite_autoindex_Variation_1") @default(autoincrement())
   productId  Int
   colorId    Int
   colorName  String

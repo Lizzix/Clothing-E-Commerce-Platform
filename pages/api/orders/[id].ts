@@ -7,10 +7,10 @@ const STATUS = ['CHECKING', 'ESTABLISHED', 'DEALING', 'SENDED', 'FINISHED', 'CAN
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 	// TODO:
 	if (req.method === 'GET') {
-		const id = req.query.id;
+		const id = req.body.id;
 		handleGET(id, res);
 	} else if (req.method == "PATCH") {
-		const { id, status } = req.query;
+		const { id, status } = req.body;
 		if (!STATUS.includes(status as string)) {
 			res.json({
 				status: 1,

@@ -53,7 +53,7 @@ CREATE TABLE `Discount`(
 	scope			VARCHAR(8)		NOT NULL CHECK( scope IN ('STORE','PRODUCT') ),
 	type			VARCHAR(8)		NOT NULL CHECK( type IN ('MINUS','MULTIPLY') ),
 	value			INTEGER			NOT NULL,
-	amount			INTEGER			NOT NULL,
+	amount			INTEGER			,
 	available 		BOOLEAN			NOT NULL,
 	startAt 		TIMESTAMP		NOT NULL,
 	endAt 			TIMESTAMP		NOT NULL,

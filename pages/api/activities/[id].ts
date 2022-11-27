@@ -3,7 +3,7 @@ import prisma from '../../../lib/prisma';
 
 // PATCH /api/activities/:id (Update the activity)
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-	const { id, available } = req.query;
+	const { id, available } = req.body;
 	if (req.method === 'PATCH') {
 		const test = await prisma.discount.findUnique({
 			where: { id: Number(id) },
@@ -18,7 +18,6 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			where: { id: Number(id) },
 			data: { available: (available === 'true') },
 		});
-
 		res.json({
 			status: 0,
 			message: "success",

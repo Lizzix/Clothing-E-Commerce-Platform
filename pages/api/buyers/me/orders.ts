@@ -33,6 +33,13 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 		});
 	} else if (req.method === 'POST') {
 		// TODO:
+		const { activityId, couponId, items } = req.body;
+		res.json({
+			activityId: activityId,
+			couponId: couponId,
+			items: items
+		});
+
 	} else {
 		throw new Error(
 			`The HTTP ${req.method} method is not supported at this route.`

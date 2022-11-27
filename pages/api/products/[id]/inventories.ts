@@ -4,7 +4,7 @@ import prisma from '../../../../lib/prisma';
 // PATCH /api/products/:id/inventories (Update the product's inventory)
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method === "PATCH") {
-		const { id, colorId, sizeId, inventory } = req.query;
+		const { id, colorId, sizeId, inventory } = req.body;
 		const variation = await prisma.variation.findMany({
 			where: {
 				colorId: Number(colorId),

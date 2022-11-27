@@ -8,7 +8,7 @@ import prisma from '../../../../../lib/prisma';
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 	// TODO: update for me
 	if (req.method === 'POST') {
-		const { name, scope, type, value, amount, startAt, endAt, productId, id } = req.query;
+		const { name, scope, type, value, amount, startAt, endAt, productId, id } = req.body;
 		const result = await prisma.discount.create({
 			data: {
 				name: String(name),

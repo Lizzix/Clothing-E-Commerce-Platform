@@ -1,16 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
+import { decode, JwtPayload } from "jsonwebtoken";
+import authenticated from "../../../components/authenticate";
+
+// To suppress the warning "API resolved without sending a response for /api/users, this may result in stalled requests."
+export const config = {
+	api: {
+		externalResolver: true,
+	},
+};
 
 // GET   /api/users/me (Get self data)
 // PATCH /api/users/me (Update self data)
-export default async function handle(
+export default authenticated(async function handle(
 	req: NextApiRequest,
-	res: NextApiResponse
+	res: NextApiResponse,
 ) {
+	var decoded = decode(req.cookies.token) as JwtPayload;
 	if (req.method === "GET") {
-		// TODO: get self data
 		const user = await prisma.user.findUnique({
-			where: { id: Number(req.query.id) }
+			where: { id: decoded.id }
 		});
 		res.json({
 			status: 0,
@@ -23,9 +32,9 @@ export default async function handle(
 			}
 		});
 	} else if (req.method === "PATCH") {
-		const { name, phone } = req.query;
+		const { name, phone } = req.body;
 		const user = await prisma.user.update({
-			where: { id: Number(req.body.id) },
+			where: { id: decoded.id },
 			data: {
 				name: String(name),
 				phone: String(phone)
@@ -46,4 +55,5 @@ export default async function handle(
 			`The HTTP ${req.method} method is not supported at this route.`
 		);
 	}
-}
+});
+

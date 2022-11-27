@@ -4,7 +4,7 @@ import prisma from '../../../lib/prisma';
 // PATCH /api/coupons/:id (Update the coupon)
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method === "PATCH") {
-		const { id, amount, available } = req.query;
+		const { id, amount, available } = req.body;
 
 		const result = await prisma.discount.updateMany({
 			where: { id: Number(id), format: "COUPON" },

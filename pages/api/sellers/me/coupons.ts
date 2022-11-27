@@ -18,7 +18,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 		});
 	}
 	else if (req.method === 'POST') {
-		const { name, scope, type, value, amount, startAt, endAt, productId } = req.query;
+		const { name, scope, type, value, amount, startAt, endAt, productId } = req.body;
 		if (!TYPE.includes(type as string)) {
 			res.json({
 				status: 1,
