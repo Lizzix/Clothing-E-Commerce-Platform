@@ -1,13 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../../lib/prisma';
+import { decode, JwtPayload } from "jsonwebtoken";
+import authenticated from '../../../../components/authenticate';
 
 // GET /api/sellers/me/products (Get my products)
-export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-	const my_user_id = 1;
-	// TODO: update for me
+export default authenticated(async function handle(req: NextApiRequest, res: NextApiResponse) {
+	var decoded = decode(req.cookies.token) as JwtPayload;
 	if (req.method === 'GET') {
 		const products = await prisma.product.findMany({
-			where: { sellerId: my_user_id },
+			where: { sellerId: decoded.id },
 		});
 		res.json({
 			status: 0,
@@ -19,4 +20,4 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			`The HTTP ${req.method} method is not supported at this route.`
 		);
 	}
-}
+});

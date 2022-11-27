@@ -1,15 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../../lib/prisma';
+import { decode, JwtPayload } from "jsonwebtoken";
+import authenticated from '../../../../components/authenticate';
 
 const TYPE = ['MINUS', 'MULTIPLY'];
 // POST /api/sellers/me/coupons (Create coupon)
 // GET  /api/sellers/me/coupons (Get my coupons)
-export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-	const my_user_id = 1;
-	// TODO: update for me
+export default authenticated(async function handle(req: NextApiRequest, res: NextApiResponse) {
+	var decoded = decode(req.cookies.token) as JwtPayload;
 	if (req.method === 'GET') {
 		const coupons = await prisma.discount.findMany({
-			where: { sellerId: my_user_id, format: "COUPON" },
+			where: { sellerId: decoded.id, format: "COUPON" },
 		});
 		res.json({
 			status: 0,
@@ -44,7 +45,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 						},
 						User: {
 							connect: {
-								id: my_user_id
+								id: decoded.id
 							}
 						},
 					},
@@ -80,7 +81,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 						endAt: new Date(String(endAt)),
 						User: {
 							connect: {
-								id: my_user_id
+								id: decoded.id
 							}
 						},
 					},
@@ -113,4 +114,4 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			`The HTTP ${req.method} method is not supported at this route.`
 		);
 	}
-}
+});

@@ -4,7 +4,6 @@ import prisma from '../../../lib/prisma';
 
 // GET /api/users/:id (get the user)
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-
 	if (req.method === 'GET') {
 		var decoded = decode(req.cookies.token) as JwtPayload;
 		const user_id = req.body.id;

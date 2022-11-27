@@ -6,7 +6,6 @@ const authenticated = (func: NextApiHandler) => async (
 	req: NextApiRequest,
 	res: NextApiResponse,
 ) => {
-
 	verify(String(getCookie('token', { req, res })), process.env.SECRET, async function (err, decoded) {
 		if (!err && decoded) {
 			return await func(req, res);
