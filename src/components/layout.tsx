@@ -100,14 +100,15 @@ export default function Layout(props) {
 						<Image src={Logo.src} alt='logo of cozy space' />
 					</Flex>
 					<Flex flex={{base: 1}} align='center' justify={{base: 'center', md: 'start'}}>
-						<Text
+						<Link
+							href='/'
 							className='navbar-logo'
 							textAlign={useBreakpointValue({base: 'center', md: 'left'})}
 							fontFamily={'heading'}
 							color={useColorModeValue('gray.800', 'white')}
 							display={{base: 'none', md: 'flex'}}>
 							&lt;Cozy Space /&gt;
-						</Text>
+						</Link>
 						<Flex display={{base: 'none', md: 'flex'}} ml={10}>
 							<DesktopNav />
 						</Flex>

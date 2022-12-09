@@ -82,10 +82,10 @@ export default function SignUp() {
 		<Flex
 			align={'center'}
 			justify={'center'}>
-			<Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+			<Stack spacing={8} mx={'auto'} maxW={'sm'} py={12} px={6}>
 				<Stack align={'center'}>
 					<Heading fontSize={'4xl'}>Create an account</Heading>
-					<Text fontSize={'lg'} color={'gray.600'}>
+					<Text align={'center'} fontSize={'lg'} color={'gray.600'}>
 					to check out faster & keep track of your orders ✌️
 					</Text>
 				</Stack>

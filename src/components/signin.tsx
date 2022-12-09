@@ -6,7 +6,7 @@ import {
 	Input,
 	Checkbox,
 	Stack,
-	Link,
+	Image,
 	Button,
 	Heading,
 	useColorModeValue,
@@ -17,6 +17,7 @@ import {useForm} from 'react-hook-form';
 import useSWRMutation from 'swr/mutation';
 import {useDispatch} from 'react-redux';
 import {login} from '../lib/user-slice';
+import Launching from '../assets/undraw_launching_re_tomg.svg';
 
 export default function SignIn() {
 	const toast = useToast();
@@ -97,8 +98,9 @@ export default function SignIn() {
 		<Flex
 			align={'center'}
 			justify={'center'}>
-			<Stack align={'center'} spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
-				<Heading fontSize={'4xl'}>Sign in to my account</Heading>
+			<Stack align={'center'} spacing={0} mx={'auto'} maxW={'sm'} minW={'sm'} py={12} px={6}>
+				<Heading fontSize={'4xl'}>Sign in</Heading>
+				<Image src={Launching.src} alt='launching' boxSize='260px' />
 				<Box
 					rounded={'lg'}
 					bg={useColorModeValue('white', 'gray.700')}
@@ -131,7 +133,6 @@ export default function SignIn() {
 									align={'start'}
 									justify={'space-between'}>
 									<Checkbox>Remember me</Checkbox>
-									<Link color={'blue.400'}>Forgot password?</Link>
 								</Stack>
 								<Button
 									type='submit'

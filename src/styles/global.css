@@ -1,15 +1,15 @@
-@import url("https://fonts.googleapis.com/css?family=Raleway|Source+Sans+Pro");
+@import url("https://fonts.googleapis.com/css?family=Raleway|Montserrat");
 
 .navbar-logo {
-  font-family: "Raleway", sans-serif;
+  font-family: "Raleway", sans-serif !important;
   font-style: italic;
-  font-weight: 400;
+  font-weight: 300;
   font-size: 1.1em;
 }
 
 body,
 html {
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: "Montserrat", sans-serif !important;
   font-weight: 400;
 }
 
