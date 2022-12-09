@@ -1,0 +1,38 @@
+{
+	"space": false,
+	"ignores": [
+		"next-env.d.ts",
+		"next.config.js",
+		"src/pages/api/**/*.ts",
+		"src/lib/*.ts"
+	],
+	"rules": {
+		"@typescript-eslint/no-unsafe-assignment": "off",
+		"@typescript-eslint/no-unsafe-call": "off",
+		"n/file-extension-in-import": "off",
+		"@typescript-eslint/naming-convention": [
+			"warn",
+			{
+				"selector": "variableLike",
+				"format": [
+					"camelCase",
+					"strictCamelCase",
+					"PascalCase",
+					"StrictPascalCase",
+					"snake_case",
+					"UPPER_CASE"
+				]
+			}
+		],
+		"import/extensions": [
+			"error",
+			"ignorePackages",
+			{
+				"js": "never",
+				"jsx": "never",
+				"ts": "never",
+				"tsx": "never"
+			}
+		]
+	}
+}
