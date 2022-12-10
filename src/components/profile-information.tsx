@@ -18,7 +18,6 @@ import {useRouter} from 'next/navigation';
 import {useState} from 'react';
 import {useForm} from 'react-hook-form';
 import useSWRMutation from 'swr/mutation';
-import PersonalInformation from '../assets/personal_information.svg';
 
 function handleEditInfo() {
 // TODO: 編輯資料功能
@@ -30,7 +29,7 @@ export default function ProfileInfomation({user}) {
 	const infoVariant = isSmallerThan500 ? 0 : 5;
 	const headingStyle = {
 		fontFamily: 'Raleway',
-		fontSize: '5em',
+		fontSize: '4em',
 		fontWeight: 'bold',
 	};
 	const toast = useToast();
@@ -95,8 +94,8 @@ export default function ProfileInfomation({user}) {
 
 	return (
 		<Center>
-			<Stack pb='10' align={'start'}>
-				<Heading fontSize={'9xl'} style={headingStyle}>
+			<Stack pb='10' align={{base: 'center', md: 'start'}}>
+				<Heading style={headingStyle}>
 				Hello, {user === null ? 'Username' : user.name}.
 				</Heading>
 				<Flex
@@ -105,7 +104,7 @@ export default function ProfileInfomation({user}) {
 					mt={variant}
 					grow='true'>
 					<Flex
-						align={'start'}
+						align={{base: 'center', md: 'start'}}
 						mt={{sm: '5'}}
 						minW='250px'
 						rounded={'lg'}
@@ -113,11 +112,14 @@ export default function ProfileInfomation({user}) {
 						<form onSubmit={ event => {
 							event.preventDefault();
 							setViewState(!viewState);
+							if (viewState) {
+								handleSubmit(onFormSubmit);
+							}
 						}}>
 							<Stack spacing={4} maxWidth={'xs'}>
 								<FormControl id='email' isInvalid={errors?.email?.message?.length === 0}>
 									<FormLabel>Email address</FormLabel>
-									<Input type='email' id='email' placeholder={user?.email} _placeholder={{opacity: 1, color: 'black'}} variant='filled' isInvalid/>
+									<Input type='email' id='email' placeholder={user?.email} _placeholder={{opacity: 1, color: 'black'}} variant='filled' isDisabled/>
 								</FormControl>
 								<FormControl id='name' isInvalid={errors?.name?.message?.length === 0}>
 									<FormLabel>Name</FormLabel>
@@ -156,7 +158,7 @@ export default function ProfileInfomation({user}) {
 						</form>
 					</Flex>
 					<Box>
-						<Image src={PersonalInformation.src} alt='Happy News' boxSize='200px' />
+						{/* <Image src={PersonalInformation.src} alt='Happy News' boxSize='200px' /> */}
 					</Box>
 				</Flex>
 			</Stack>

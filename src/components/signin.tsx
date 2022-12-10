@@ -65,7 +65,7 @@ export default function SignIn() {
 			onSuccess(response) {
 				if (response.status === 0) {
 					toast({
-						description: 'Sign up successfully! Redirecting to front page.',
+						description: 'Sign in successfully!',
 						status: 'success',
 						duration: 5000,
 						isClosable: true,

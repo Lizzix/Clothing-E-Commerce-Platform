@@ -76,7 +76,7 @@ export default function Layout(props) {
 			status: 'info',
 			duration: 3000,
 			isClosable: true,
-			position: 'top',
+			position: 'bottom',
 		});
 		await router.push('/');
 	};
@@ -159,28 +159,26 @@ export default function Layout(props) {
 							//TODO: search
 						<IconButton icon={<Search2Icon />} variant={'ghost'} aria-label={'Search database'} />
 						{user ? (
-							<Menu>
-								<MenuButton
-									as={Button}
-									Rounded={'full'}
-									variant={'link'}
-									cursor={'pointer'}
-									minW={0}
-								>
-									<Avatar
-										size={'xs'}
-										bg='gray.400'
-									/>
-								</MenuButton>
-								<MenuList alignContent={'center'}>
-									<Center >{user === null ? 'Username' : ('Hi, ' + String(user.name) + '!')}</Center>
-									<MenuDivider />
-									<MenuItem icon={<FaUserAstronaut />} onClick={handleAccountPage}>My Account</MenuItem>
-									<MenuItem icon={<RiShoppingBag3Fill />} onClick={handleOrderPage}>My Orders</MenuItem>
-									<MenuItem icon={<RiCoupon3Fill />} onClick={handleCouponPage}>My Coupons</MenuItem>
-									<MenuItem icon={<RiLogoutBoxFill />} onClick={handleLogout}>Logout</MenuItem>
-								</MenuList>
-							</Menu>
+							<Flex>
+								<Menu>
+									<MenuButton
+										as={Button}
+										rounded={'full'}
+										variant={'link'}
+										cursor={'pointer'}
+										minW={0}>
+										<Avatar size={'xs'} bg='gray.400'/>
+									</MenuButton>
+									<MenuList alignContent={'center'}>
+										<Center >{user === null ? 'Username' : ('Hi, ' + String(user.name) + '!')}</Center>
+										<MenuDivider />
+										<MenuItem icon={<FaUserAstronaut />} onClick={handleAccountPage}>My Account</MenuItem>
+										<MenuItem icon={<RiShoppingBag3Fill />} onClick={handleOrderPage}>My Orders</MenuItem>
+										<MenuItem icon={<RiCoupon3Fill />} onClick={handleCouponPage}>My Coupons</MenuItem>
+										<MenuItem icon={<RiLogoutBoxFill />} onClick={handleLogout}>Logout</MenuItem>
+									</MenuList>
+								</Menu>
+							</Flex>
 						) : (
 							<Button
 								as={'a'}
