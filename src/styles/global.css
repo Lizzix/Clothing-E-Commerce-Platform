@@ -13,3 +13,6 @@ html {
   font-weight: 400;
 }
 
+#menu-avatar > * {
+  font-size: 0.5em !important;
+}

@@ -47,14 +47,14 @@ export default function SignIn() {
 
 	const {trigger} = useSWRMutation('api/users/signIn', fetcher);
 
-	const handleSuccess = (
-		id: string,
-		token: string,
-	) => {
+	const handleSuccess = (data: {id: any; name: any; email: any; phone: any; token: any}) => {
 		dispatch(
 			login({
-				id,
-				token,
+				id: data.id,
+				name: data.name,
+				email: data.email,
+				phone: data.phone,
+				token: data.token,
 			}),
 		);
 		router.push('/');
@@ -71,7 +71,7 @@ export default function SignIn() {
 						isClosable: true,
 						position: 'bottom',
 					});
-					handleSuccess(response.data.id, response.data.token);
+					handleSuccess(response.data);
 				} else {
 					toast({
 						description: 'This email address is not registered, or the password is incorrect.',
@@ -98,7 +98,7 @@ export default function SignIn() {
 		<Flex
 			align={'center'}
 			justify={'center'}>
-			<Stack align={'center'} spacing={0} mx={'auto'} maxW={'sm'} minW={'sm'} py={12} px={6}>
+			<Stack align={'center'} spacing={0} mx={'auto'} minW={'sm'} py={12} px={6}>
 				<Heading fontSize={'4xl'}>Sign in</Heading>
 				<Image src={Launching.src} alt='launching' boxSize='260px' />
 				<Box
@@ -107,7 +107,7 @@ export default function SignIn() {
 					boxShadow={'lg'}
 					p={8}>
 					<form onSubmit={handleSubmit(onFormSubmit)}>
-						<Stack spacing={4}>
+						<Stack spacing={4} minWidth={'340px'}>
 							<FormControl id='email' isInvalid={errors?.email?.message.length === 0}>
 								<FormLabel>Email address</FormLabel>
 								<Input type='email' id='email'

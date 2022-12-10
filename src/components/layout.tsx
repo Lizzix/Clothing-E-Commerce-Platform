@@ -1,4 +1,4 @@
-import React, {type MouseEventHandler} from 'react';
+import React, {useCallback, type MouseEventHandler, useState, useEffect} from 'react';
 import {useRouter} from 'next/router';
 import {
 	Box,
@@ -17,13 +17,27 @@ import {
 	useColorModeValue,
 	useBreakpointValue,
 	useDisclosure,
+	useToast,
+	Menu,
+	MenuButton,
+	MenuList,
+	MenuItem,
+	MenuDivider,
+	Center,
+	Avatar,
+
 } from '@chakra-ui/react';
 import {
 	HamburgerIcon,
 	CloseIcon,
 	ChevronDownIcon,
 	ChevronRightIcon,
+	Search2Icon,
 } from '@chakra-ui/icons';
+import {useDispatch, useSelector} from 'react-redux';
+import {FaUserAstronaut} from 'react-icons/fa';
+import {RiShoppingBag3Fill, RiCoupon3Fill, RiLogoutBoxFill} from 'react-icons/ri';
+import {logout, selectUser, selectLoggedIn} from '../lib/user-slice';
 import Logo from '../assets/logo.png';
 
 type Props = {
@@ -32,16 +46,39 @@ type Props = {
 
 export default function Layout(props) {
 	const {isOpen, onToggle} = useDisclosure();
+	const toast = useToast();
 	const router = useRouter();
+	const dispatch = useDispatch();
+	const user = useSelector(selectUser);
+	const login_state = useSelector(selectLoggedIn);
+	const [isLoggedin, setLoggedin] = useState(login_state);
+	useEffect(() => {
+		setLoggedin(login_state);
+	}, [login_state]);
 
-	const logout = async () => {
-		await fetch('http://localhost:8000/api/logout', {
-			method: 'POST',
-			headers: {'Content-Type': 'application/json'},
-			credentials: 'include',
+	const handleAccountPage = useCallback(
+		async () => router.push('/my/account'),
+		[router],
+	);
+	const handleOrderPage = useCallback(
+		async () => router.push('/my/orders'),
+		[router],
+	);
+	const handleCouponPage = useCallback(
+		async () => router.push('/my/coupons'),
+		[router],
+	);
+
+	const handleLogout = async () => {
+		dispatch(logout());
+		toast({
+			description: 'Logged out successfully.',
+			status: 'info',
+			duration: 3000,
+			isClosable: true,
+			position: 'top',
 		});
-
-		await router.push('/login');
+		await router.push('/');
 	};
 
 	let menu: JSX.Element;
@@ -49,7 +86,7 @@ export default function Layout(props) {
 		menu = (
 			<ul className='navbar-nav me-auto mb-2 mb-md-0'>
 				<li className='nav-item'>
-					<a href='#' className='nav-link active' onClick={logout}>Logout</a>
+					<a href='#' className='nav-link active' onClick={handleLogout}>Logout</a>
 				</li>
 			</ul>
 		);
@@ -115,23 +152,51 @@ export default function Layout(props) {
 					</Flex>
 
 					<Stack
+						direction={'row'}
 						display={{base: 'none', md: 'flex'}}
 						flex={{base: 1, md: 0}}
 						justify={'flex-end'}>
-						<Button
-							as={'a'}
-							fontSize={'sm'}
-							fontWeight={400}
-							variant={'link'}
-							href={'/login'}>
-							{/* CHECK: handle routing on upper level */}
-            Sign In
-						</Button>
+							//TODO: search
+						<IconButton icon={<Search2Icon />} variant={'ghost'} aria-label={'Search database'} />
+						{user ? (
+							<Menu>
+								<MenuButton
+									as={Button}
+									Rounded={'full'}
+									variant={'link'}
+									cursor={'pointer'}
+									minW={0}
+								>
+									<Avatar
+										size={'xs'}
+										bg='gray.400'
+									/>
+								</MenuButton>
+								<MenuList alignContent={'center'}>
+									<Center >{user === null ? 'Username' : ('Hi, ' + String(user.name) + '!')}</Center>
+									<MenuDivider />
+									<MenuItem icon={<FaUserAstronaut />} onClick={handleAccountPage}>My Account</MenuItem>
+									<MenuItem icon={<RiShoppingBag3Fill />} onClick={handleOrderPage}>My Orders</MenuItem>
+									<MenuItem icon={<RiCoupon3Fill />} onClick={handleCouponPage}>My Coupons</MenuItem>
+									<MenuItem icon={<RiLogoutBoxFill />} onClick={handleLogout}>Logout</MenuItem>
+								</MenuList>
+							</Menu>
+						) : (
+							<Button
+								as={'a'}
+								fontSize={'sm'}
+								fontWeight={400}
+								variant={'link'}
+								href={'/login'}>
+								{/* CHECK: handle routing on upper level */}
+							Sign In
+							</Button>
+						)}
 					</Stack>
 				</Flex>
 
 				<Collapse in={isOpen} animateOpacity>
-					<MobileNav />
+					<MobileNav isLoggedin={isLoggedin} />
 				</Collapse>
 			</Box>
 			<main className='form-signin'>
@@ -219,17 +284,50 @@ const DesktopSubNav = ({label, href, subLabel}: NavItem) => (
 		</Stack>
 	</Link>
 );
+const UserMobileNavItem: NavItem[] = [
+	{
+		label: 'My',
+		children: [
+			{
+				label: 'My Account',
+				href: 'my/account',
+			},
+			{
+				label: 'My Orders',
+				href: 'my/orders',
+			},
+			{
+				label: 'My Coupons',
+				href: 'my/coupons',
+			},
+		]},
+	{
+		label: 'Logout',
+		href: '/api/logout',
+	},
+];
 
-const MobileNav = () => (
-	<Stack
-		bg={useColorModeValue('white', 'gray.800')}
-		p={4}
-		display={{md: 'none'}}>
-		{NAV_ITEMS.map(navItem => (
-			<MobileNavItem key={navItem.label} {...navItem} />
-		))}
-	</Stack>
-);
+function MobileNav(props) {
+	const {isLoggedin} = props;
+	return (
+		<Stack
+			bg={useColorModeValue('white', 'gray.800')}
+			p={4}
+			display={{md: 'none'}}>
+			{NAV_ITEMS.map(navItem => (
+				<MobileNavItem key={navItem.label} {...navItem} />
+			))}
+			{
+				(isLoggedin) ? (
+					UserMobileNavItem.map(navItem => (
+						<MobileNavItem key={navItem.label} {...navItem} />))
+				) : (
+					<MobileNavItem key='signin' label='Sign in' href='/login' />
+				)
+			}
+		</Stack>
+	);
+}
 
 const MobileNavItem = ({label, children, href}: NavItem) => {
 	const {isOpen, onToggle} = useDisclosure();
@@ -319,7 +417,7 @@ const NAV_ITEMS: NavItem[] = [
 		],
 	},
 	{
-		label: 'Accessories',
+		label: 'Coupon',
 		href: '#',
 	},
 	{

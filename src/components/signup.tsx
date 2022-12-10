@@ -95,7 +95,7 @@ export default function SignUp() {
 					boxShadow={'lg'}
 					p={8}>
 					<form onSubmit={handleSubmit(onFormSubmit)}>
-						<Stack spacing={4}>
+						<Stack spacing={4} minWidth={'340px'}>
 							<FormControl id='name' isInvalid={errors?.name?.message.length === 0}>
 								<FormLabel>Name</FormLabel>
 								<Input type='text' id='name'
@@ -135,17 +135,19 @@ export default function SignUp() {
 										minLength: {value: 6, message: 'Password must be at least 6 characters long'},
 									})}/>
 							</FormControl>
-							<Button
-								type='submit'
-								mt={5}
-								bg={'blue.400'}
-								color={'white'}
-								_hover={{
-									bg: 'blue.500',
-								}}
-								isLoading={isSubmitting}>
+							<Stack spacing={10}>
+								<Button
+									type='submit'
+									mt={5}
+									bg={'blue.400'}
+									color={'white'}
+									_hover={{
+										bg: 'blue.500',
+									}}
+									isLoading={isSubmitting}>
 								Sign up
-							</Button>
+								</Button>
+							</Stack>
 						</Stack>
 					</form>
 				</Box>
