@@ -81,7 +81,8 @@ export default function SignUp() {
 	return (
 		<Flex
 			align={'center'}
-			justify={'center'}>
+			justify={'center'}
+			mx={'10'}>
 			<Stack spacing={8} mx={'auto'} maxW={'sm'} py={12} px={6}>
 				<Stack align={'center'}>
 					<Heading fontSize={'4xl'}>Create an account</Heading>
@@ -96,7 +97,7 @@ export default function SignUp() {
 					p={8}>
 					<form onSubmit={handleSubmit(onFormSubmit)}>
 						<Stack spacing={4} minWidth={'340px'}>
-							<FormControl id='name' isInvalid={errors?.name?.message.length === 0}>
+							<FormControl id='name' isInvalid={errors?.name?.message?.length === 0}>
 								<FormLabel>Name</FormLabel>
 								<Input type='text' id='name'
 									{...register('name', {
@@ -104,7 +105,7 @@ export default function SignUp() {
 										minLength: {value: 3, message: 'Name must be at least 3 characters long'},
 									})}/>
 							</FormControl>
-							<FormControl id='email' isInvalid={errors?.email?.message.length === 0}>
+							<FormControl id='email' isInvalid={errors?.email?.message?.length === 0}>
 								<FormLabel>Email address</FormLabel>
 								<Input type='email' id='email'
 									{...register('email', {
@@ -115,7 +116,7 @@ export default function SignUp() {
 										},
 									})} />
 							</FormControl>
-							<FormControl id='phone' isInvalid={errors?.phone?.message.length === 0}>
+							<FormControl id='phone' isInvalid={errors?.phone?.message?.length === 0}>
 								<FormLabel>Phone</FormLabel>
 								<InputGroup>
 									<InputLeftAddon children='+886' />
@@ -127,7 +128,7 @@ export default function SignUp() {
 										})}/>
 								</InputGroup>
 							</FormControl>
-							<FormControl id='password' isInvalid={errors?.password?.message.length === 0}>
+							<FormControl id='password' isInvalid={errors?.password?.message?.length === 0}>
 								<FormLabel>Password</FormLabel>
 								<Input type='password' id='password'
 									{...register('password', {

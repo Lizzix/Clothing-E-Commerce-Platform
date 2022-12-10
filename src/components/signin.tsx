@@ -97,10 +97,11 @@ export default function SignIn() {
 	return (
 		<Flex
 			align={'center'}
-			justify={'center'}>
+			justify={'center'}
+			mx={'10'}>
 			<Stack align={'center'} spacing={0} mx={'auto'} minW={'sm'} py={12} px={6}>
 				<Heading fontSize={'4xl'}>Sign in</Heading>
-				<Image src={Launching.src} alt='launching' boxSize='260px' />
+				<Image src={Launching.src} alt='launching' boxSize='280px' />
 				<Box
 					rounded={'lg'}
 					bg={useColorModeValue('white', 'gray.700')}
@@ -108,7 +109,7 @@ export default function SignIn() {
 					p={8}>
 					<form onSubmit={handleSubmit(onFormSubmit)}>
 						<Stack spacing={4} minWidth={'340px'}>
-							<FormControl id='email' isInvalid={errors?.email?.message.length === 0}>
+							<FormControl id='email' isInvalid={errors?.email?.message?.length === 0}>
 								<FormLabel>Email address</FormLabel>
 								<Input type='email' id='email'
 									{...register('email', {
@@ -119,7 +120,7 @@ export default function SignIn() {
 										},
 									})} />
 							</FormControl>
-							<FormControl id='password' isInvalid={errors?.password?.message.length === 0}>
+							<FormControl id='password' isInvalid={errors?.password?.message?.length === 0}>
 								<FormLabel>Password</FormLabel>
 								<Input type='password' id='password'
 									{...register('password', {

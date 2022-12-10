@@ -1,23 +1,44 @@
-import {configureStore, ThunkAction, Action} from '@reduxjs/toolkit';
+import {configureStore,getDefaultMiddleware} from '@reduxjs/toolkit';
 import {setupListeners} from '@reduxjs/toolkit/dist/query';
-import {persistStore, persistReducer} from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import {
+	persistStore,
+	persistReducer,
+	FLUSH,
+	REHYDRATE,
+	PAUSE,
+	PERSIST,
+	PURGE,
+	REGISTER,
+  } from 'redux-persist';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import userReducer from './user-slice';
 
 const persistConfig = {
 	key: 'root',
-	storage,
-	whitelist: ['user'],
+	storage: AsyncStorage,
 };
-const persisitedReducer = persistReducer(persistConfig, userReducer);
+
+const persistedReducer = persistReducer(persistConfig, userReducer);
+
+let mainReducer;
+if (typeof window !== "undefined") {
+	mainReducer = persistedReducer;
+} else {
+	mainReducer = userReducer;
+}
 const store = configureStore({
 	reducer: {
-		user: persisitedReducer,
+		user: mainReducer,
 	},
+	middleware: (getDefaultMiddleware) =>
+	getDefaultMiddleware({
+		serializableCheck: {
+			ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+		},
+	}),
 });
 
 setupListeners(store.dispatch);
-
 const persistor = persistStore(store);
 export {persistor};
 export default store;
