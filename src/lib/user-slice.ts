@@ -85,8 +85,8 @@ export const selectLoggedIn = (state) => state.user.loggedIn as LoginState;
 export const selectCoupons = (state) =>
 {
 	return {
-		sellers: state.user.sellerCoupons as Coupon[],
-		buyers: state.user.buyerCoupons as Coupon[],
+		sellers: state.user.sellerCoupons,
+		buyers: state.user.buyerCoupons,
 	};
 }
 export const selectOrders = (state) => state.user.orders;
