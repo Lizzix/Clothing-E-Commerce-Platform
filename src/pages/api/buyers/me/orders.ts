@@ -8,7 +8,6 @@ import { Discount, User_Coupon } from '@prisma/client';
 // GET  /api/buyers/me/orders (Get my orders)
 export default authenticated(async function handle(req: NextApiRequest, res: NextApiResponse) {
 	var decoded = decode(req.cookies.token) as JwtPayload;
-	// TODO: update for me
 	if (req.method === 'GET') {
 		const orders = await prisma.order.findMany({
 			where: { buyerId: decoded.id },
@@ -18,7 +17,7 @@ export default authenticated(async function handle(req: NextApiRequest, res: Nex
 			const order_item_infos = await prisma.order_Item.findMany({
 				where: { orderId: o.id },
 			});
-			let items = [];
+			let items_list = [];
 			for (const i of order_item_infos) {
 				const product_info = await prisma.product.findUnique({
 					where: { id: i.productId },
@@ -26,7 +25,7 @@ export default authenticated(async function handle(req: NextApiRequest, res: Nex
 				const variation_info = await prisma.variation.findUnique({
 					where: { id: i.variationId },
 				});
-				items.push({
+				items_list.push({
 					productId: i.productId,
 					name: product_info.name,
 					description: product_info.description,
@@ -39,7 +38,7 @@ export default authenticated(async function handle(req: NextApiRequest, res: Nex
 			}
 			order_list.push({
 				id: o.id,
-				items: items,
+				items: items_list,
 				totalPrice: o.totalPrice,
 				status: o.status,
 				sellerId: o.sellerId,
@@ -73,18 +72,36 @@ export default authenticated(async function handle(req: NextApiRequest, res: Nex
 			});
 			seller_id = Number(product.sellerId);
 		}
+
+		let create_order_item_list = [];
 		let order_item_list = [];
+		let variation_list = []
 		let totalPrice = 0;
 		for (const o of items) {
-			order_item_list.push({
+			const v = await prisma.variation.findMany({
+				where: { productId: o.productId,
+				colorName: o.color,
+				sizeName: o.size },
+			});
+			create_order_item_list.push({
 				productId: o.productId,
-				variationId: o.variationId,
+				variationId: v[0].id,
 				quantity: o.amount,
 			});
 			let product = await prisma.product.findUnique({
 				where: { id: o.productId },
 			});
 			totalPrice += o.amount * product.price;
+			order_item_list.push({
+				productId: o.productId,
+				name: product.name,
+				description: product.description,
+				picture: product.picture,
+				color: o.color,
+				size: o.size,
+				price: product.price,
+				amount: o.amount,
+			});
 		}
 
 		if (discount_id != 0) {
@@ -96,32 +113,58 @@ export default authenticated(async function handle(req: NextApiRequest, res: Nex
 			}
 		}
 
-		const result = await prisma.order.create({
-			data: {
-				totalPrice: totalPrice,
-				createdAt: new Date(),
-				updatedAt: new Date(),
-				status: 'CHECKING',
-				Discount:{
-					connect: {
-						id: discount_id
+		let result;
+		if (discount_id !== 0) {
+			result = await prisma.order.create({
+				data: {
+					totalPrice: totalPrice,
+					createdAt: new Date(),
+					updatedAt: new Date(),
+					status: 'CHECKING',
+					Discount:{
+						connect: {
+							id: discount_id
+						}
+					},
+					User_Order_sellerIdToUser: {
+						connect: {
+							id: seller_id
+						}
+					},
+					User_Order_buyerIdToUser: {
+						connect: {
+							id: Number(decoded.id)
+						}
+					},
+					Order_Item: {
+						create: create_order_item_list
 					}
-				},
-				User_Order_sellerIdToUser: {
-					connect: {
-						id: seller_id
-					}
-				},
-				User_Order_buyerIdToUser: {
-					connect: {
-						id: Number(decoded.id)
-					}
-				},
-				Order_Item: {
-					create: order_item_list
 				}
-			}
-		});
+			});
+		} else {
+			result = await prisma.order.create({
+				data: {
+					totalPrice: totalPrice,
+					createdAt: new Date(),
+					updatedAt: new Date(),
+					status: 'CHECKING',
+					User_Order_sellerIdToUser: {
+						connect: {
+							id: seller_id
+						}
+					},
+					User_Order_buyerIdToUser: {
+						connect: {
+							id: Number(decoded.id)
+						}
+					},
+					Order_Item: {
+						create: create_order_item_list
+					}
+				}
+			});
+		}
+
 		if (couponId !== 0) {
 			const updatecoupon = await prisma.user_Coupon.updateMany({
 				where: {
@@ -137,7 +180,16 @@ export default authenticated(async function handle(req: NextApiRequest, res: Nex
 		res.json({
 			status: 0,
 			message: "success",
-			data: result
+			data: {
+				id: result.id,
+				items: order_item_list,
+				totalPrice: result.totalPrice,
+				status: result.status,
+				sellerId: result.sellerId,
+				buyerId: result.buyerId,
+				createdAt: result.createdAt,
+				updatedAt: result.updatedAt
+			}
 		});
 
 	} else {
