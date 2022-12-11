@@ -6,7 +6,7 @@ import prisma from '../../../../lib/prisma';
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method === "GET") {
 		const id = req.query.id;
-		handleGET(id, res);
+		handleGETProduct(id, res);
 	} else if (req.method === "PATCH") {
 		const id = req.query.id;
 		const available = req.body.available;
@@ -23,7 +23,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			where: { id: Number(id), },
 			data: { available: (available === 'true') },
 		});
-		handleGET(id, res);
+		handleGETProduct(id, res);
 	} else {
 		throw new Error(
 			`The HTTP ${req.method} method is not supported at this route.`
@@ -31,7 +31,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 	}
 }
 
-export async function handleGET(id: string | string[], res: NextApiResponse<any>) {
+export async function handleGETProduct(id: string | string[] | Number, res: NextApiResponse<any>) {
 	const product = await prisma.product.findUnique({
 		where: { id: Number(id), },
 	});

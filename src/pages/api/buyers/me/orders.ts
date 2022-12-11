@@ -53,7 +53,6 @@ export default authenticated(async function handle(req: NextApiRequest, res: Nex
 			data: order_list
 		});
 	} else if (req.method === 'POST') {
-		// TODO:
 		const { activityId, couponId, items } = req.body;
 
 		let discount_id = Number(activityId) !== 0 ? Number(activityId) : Number(couponId);
@@ -75,7 +74,6 @@ export default authenticated(async function handle(req: NextApiRequest, res: Nex
 
 		let create_order_item_list = [];
 		let order_item_list = [];
-		let variation_list = []
 		let totalPrice = 0;
 		for (const o of items) {
 			const v = await prisma.variation.findMany({
