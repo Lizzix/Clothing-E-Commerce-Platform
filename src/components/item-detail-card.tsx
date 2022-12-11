@@ -21,7 +21,7 @@ export default function OrderItemDetailCard(props) {
 				<Heading>{item.name}</Heading>
 				<Text>NT$ {item.price}</Text>
 				<Text>{item.description}</Text>
-				<Text>post date: {item.startAt.split('T')[0]}</Text>
+				<Text>posted on: {item.startAt.split('T')[0]}</Text>
 			</Stack>
 		</Flex>
 	);

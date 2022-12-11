@@ -19,7 +19,7 @@ export default function ProductDetailCard(props) {
 			<Image src={item.picture} alt='item image' boxSize={'350'} mx={'5'}/>
 			<Spacer />
 			<Stack mx={'5'}>
-				<Heading>{item.name}</Heading>
+				<Heading py={'2'}>{item.name}</Heading>
 				<Text>NT$ {item.price}</Text>
 				<Text>{item.description}</Text>
 				{item.available ? (
@@ -46,7 +46,7 @@ export default function ProductDetailCard(props) {
 					<Text>Out of stock</Text>
 				)}
 
-				<Text>post date: {item.startAt.split('T')[0]}</Text>
+				<Text>posted on: {item.startAt.split('T')[0]}</Text>
 			</Stack>
 		</Flex>
 	);
