@@ -6,9 +6,9 @@ import prisma from '../../../lib/prisma';
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method === 'GET') {
 		var decoded = decode(req.cookies.token) as JwtPayload;
-		const user_id = req.body.id;
+		const user_id = Number(req.query.id);
 		if (user_id != decoded.id) {
-			res.status(401).json({
+			res.status(400).json({
 				status: 1,
 				message: "You can only view your own profile."
 			});

@@ -288,15 +288,15 @@ const UserMobileNavItem: NavItem[] = [
 		children: [
 			{
 				label: 'My Account',
-				href: 'my/account',
+				href: '/my/account',
 			},
 			{
 				label: 'My Orders',
-				href: 'my/orders',
+				href: '/my/orders',
 			},
 			{
 				label: 'My Coupons',
-				href: 'my/coupons',
+				href: '/my/coupons',
 			},
 		]},
 	{

@@ -38,6 +38,12 @@ export const userSlice = createSlice({
 		updateBuyerCoupons(state, action) {
 			state.buyerCoupons = action.payload;
 		},
+		updateSellerOrders(state, action) {
+			state.sellerOrders = action.payload;
+		},
+		updateBuyerOrders(state, action) {
+			state.buyerOrders = action.payload;
+		},
 		updateSellerData(state, action) {
 			state.readSellerData = true;
 			state.sellerCoupons = action.payload.coupons;
@@ -60,26 +66,18 @@ export type MyUser = {
 }
 export type LoginState = boolean;
 
-export type Coupon = {
-	name: String,
-	scope: String,
-	productId: number,
-	type: String,
-	value: number,
-	amount: number,
-	startAt: Date,
-	endAt: Date,
-}
-
 export const {
 	login,
 	logout,
 	updateUser,
 	updateSellerCoupons,
 	updateBuyerCoupons,
+	updateSellerOrders,
+	updateBuyerOrders,
 	updateSellerData,
-	updateBuyerData
+	updateBuyerData,
 } = userSlice.actions;
+
 export const selectUser = (state) => state.user.user as MyUser;
 export const selectLoggedIn = (state) => state.user.loggedIn as LoginState;
 export const selectCoupons = (state) =>
@@ -89,6 +87,12 @@ export const selectCoupons = (state) =>
 		buyers: state.user.buyerCoupons,
 	};
 }
-export const selectOrders = (state) => state.user.orders;
+export const selectOrders = (state) =>
+{
+	return {
+		sellers: state.user.sellerOrders,
+		buyers: state.user.buyerOrders,
+	};
+}
 
 export default userSlice.reducer;

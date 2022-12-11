@@ -33,13 +33,37 @@ export default authenticated(async function handle(
 		});
 	} else if (req.method === "PATCH") {
 		const { name, phone } = req.body;
-		const user = await prisma.user.update({
-			where: { id: decoded.id },
-			data: {
-				name: String(name),
-				phone: String(phone)
-			}
-		});
+		let user;
+		if ((name === undefined || name === "") && (phone === undefined || phone === "")) {
+			res.json({
+				status: 1,
+				message: "name and phone cannot both be null",
+			});
+			return;
+		}
+		else if (name === undefined || name === "") {
+			user = await prisma.user.update({
+				where: { id: decoded.id },
+				data: {
+					phone: String(phone)
+				}
+			});
+		} else if (phone === undefined || phone === "") {
+			user = await prisma.user.update({
+				where: { id: decoded.id },
+				data: {
+					name: String(name),
+				}
+			});
+		} else {
+			user = await prisma.user.update({
+				where: { id: decoded.id },
+				data: {
+					name: String(name),
+					phone: String(phone)
+				}
+			});
+		}
 		res.json({
 			status: 0,
 			message: "success",

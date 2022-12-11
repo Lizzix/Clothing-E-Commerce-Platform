@@ -17,7 +17,14 @@ import {useRouter} from 'next/navigation';
 import {useForm} from 'react-hook-form';
 import useSWRMutation from 'swr/mutation';
 import {useDispatch} from 'react-redux';
-import {login, updateBuyerCoupons, updateSellerCoupons, updateUser} from '../lib/user-slice';
+import {
+	login,
+	updateBuyerCoupons,
+	updateSellerCoupons,
+	updateUser,
+	updateBuyerOrders,
+	updateSellerOrders,
+} from '../lib/user-slice';
 import Launching from '../assets/undraw_launching_re_tomg.svg';
 
 export default function SignIn() {
@@ -66,7 +73,7 @@ export default function SignIn() {
 			});
 	}
 
-	async function getUserCoupon() {
+	async function getUserCoupons() {
 		await fetch('api/buyers/me/coupons', {
 			method: 'GET',
 			headers: {
@@ -93,6 +100,33 @@ export default function SignIn() {
 			});
 	}
 
+	async function getUserOrders() {
+		await fetch('api/buyers/me/orders', {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+			},
+		})
+			.then(async response => response.json())
+			.then(json => {
+				dispatch(updateBuyerOrders({
+					buyerOrders: json.data,
+				}));
+			});
+		await fetch('api/sellers/me/orders', {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+			},
+		})
+			.then(async response => response.json())
+			.then(json => {
+				dispatch(updateSellerOrders({
+					sellerOrders: json.data,
+				}));
+			});
+	}
+
 	const handleSuccess = async (data: {id: any; name: any; email: any; phone: any; token: any}) => {
 		dispatch(
 			login({
@@ -101,7 +135,8 @@ export default function SignIn() {
 			}),
 		);
 		await getUserData();
-		await getUserCoupon();
+		await getUserCoupons();
+		await getUserOrders();
 		router.push('/');
 	};
 

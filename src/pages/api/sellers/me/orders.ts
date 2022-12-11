@@ -10,7 +10,7 @@ export default authenticated(async function handle(req: NextApiRequest, res: Nex
 		const orders = await prisma.order.findMany({
 			where: { sellerId: decoded.id },
 		});
-		let order_list;
+		let order_list = [];
 		for (const o of orders) {
 			const items = await prisma.order_Item.findMany({
 				where: { orderId: o.id },

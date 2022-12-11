@@ -26,7 +26,7 @@ export default function Coupons() {
 						bg={useColorModeValue('white', 'gray.700')}
 						boxShadow={'lg'}
 						p={5}>
-						<CouponTable coupon={buyers.buyerCoupons} variant={isSmallerThan750} />
+						<CouponTable coupon={buyers?.buyerCoupons} variant={isSmallerThan750} />
 					</Flex>
 				</Stack>
 
@@ -39,7 +39,7 @@ export default function Coupons() {
 						bg={useColorModeValue('white', 'gray.700')}
 						boxShadow={'lg'}
 						p={5}>
-						<CouponTable coupon={sellers.sellerCoupons} variant={isSmallerThan750} />
+						<CouponTable coupon={sellers?.sellerCoupons} variant={isSmallerThan750} />
 					</Flex>
 				</Stack>
 			</Stack>
