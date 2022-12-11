@@ -1,6 +1,6 @@
 import {Flex, useColorModeValue} from '@chakra-ui/react';
 import {useSelector} from 'react-redux';
-import ProfileInfomation from '../../components/profile-Information';
+import ProfileInfomation from '../../components/profile-information';
 import {selectUser} from '../../lib/user-slice';
 
 export default function Account() {

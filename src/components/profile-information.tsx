@@ -11,22 +11,18 @@ import {
 	FormLabel,
 	Input,
 	useToast,
-	InputGroup,
+	Text,
 	Center,
 } from '@chakra-ui/react';
 import {useRouter} from 'next/navigation';
 import {useState} from 'react';
 import {useForm} from 'react-hook-form';
 import useSWRMutation from 'swr/mutation';
-
-function handleEditInfo() {
-// TODO: 編輯資料功能
-}
+import Reading from '../assets/undraw_reading_time_re_phf7.svg';
 
 export default function ProfileInfomation({user}) {
 	const [isSmallerThan500] = useMediaQuery('(max-width: 500px)');
-	const variant = isSmallerThan500 ? 5 : 5;
-	const infoVariant = isSmallerThan500 ? 0 : 5;
+	const infoVariant = isSmallerThan500 ? 5 : 0;
 	const headingStyle = {
 		fontFamily: 'Raleway',
 		fontSize: '4em',
@@ -57,32 +53,24 @@ export default function ProfileInfomation({user}) {
 	}
 
 	const {trigger} = useSWRMutation('api/users/me', fetcher);
-	// TODO:
+	// TODO: Add Info useEffect
 	const onFormSubmit = async values => {
 		await trigger(values, {
 			onSuccess(response) {
-				if (response.message === 'user already exists') {
+				if (response.message === 'success') {
 					toast({
-						description: 'User already exists!',
-						status: 'error',
-						duration: 5000,
-						isClosable: true,
-						position: 'bottom',
-					});
-				} else {
-					toast({
-						description: 'Sign up successfully! Redirecting to front page.',
+						description: 'Update successfully!',
 						status: 'success',
 						duration: 5000,
 						isClosable: true,
 						position: 'bottom',
 					});
-					router.push('/');
+					router.push('/my/account');
 				}
 			},
 			onError() {
 				toast({
-					description: 'Registration failed! Please try again later.',
+					description: 'Update failed! Please try again later.',
 					status: 'error',
 					duration: 5000,
 					isClosable: true,
@@ -94,14 +82,17 @@ export default function ProfileInfomation({user}) {
 
 	return (
 		<Center>
-			<Stack pb='10' align={{base: 'center', md: 'start'}}>
+			<Stack py='10' align={{base: 'center', md: 'start'}} mx={infoVariant}>
 				<Heading style={headingStyle}>
 				Hello, {user === null ? 'Username' : user.name}.
 				</Heading>
+				<Text>Travel, explore, or just enjoy your life in <Text as='mark' bgColor={'yellow.200'} fontFamily={'Raleway'}><i>&lt;Cozy Space /&gt;.</i></Text></Text>
+
 				<Flex
 					direction={'row'}
 					wrap={'wrap'}
-					mt={variant}
+					mt={5}
+					justifyContent={{base: 'center', md: 'start'}}
 					grow='true'>
 					<Flex
 						align={{base: 'center', md: 'start'}}
@@ -158,7 +149,7 @@ export default function ProfileInfomation({user}) {
 						</form>
 					</Flex>
 					<Box>
-						{/* <Image src={PersonalInformation.src} alt='Happy News' boxSize='200px' /> */}
+						<Image src={Reading.src} alt='enjoy yourlife' boxSize='sm' />
 					</Box>
 				</Flex>
 			</Stack>

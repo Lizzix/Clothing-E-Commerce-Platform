@@ -39,9 +39,6 @@ export default async function handle(
 						message: "success",
 						data: {
 							id: query.id,
-							name: query.name,
-							email: query.email,
-							phone: query.phone,
 							token: jwt,
 						}
 					});

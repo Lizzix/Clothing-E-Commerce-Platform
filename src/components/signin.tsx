@@ -1,3 +1,4 @@
+import {url} from 'node:inspector';
 import {
 	Flex,
 	Box,
@@ -16,7 +17,7 @@ import {useRouter} from 'next/navigation';
 import {useForm} from 'react-hook-form';
 import useSWRMutation from 'swr/mutation';
 import {useDispatch} from 'react-redux';
-import {login} from '../lib/user-slice';
+import {login, updateBuyerCoupons, updateSellerCoupons, updateUser} from '../lib/user-slice';
 import Launching from '../assets/undraw_launching_re_tomg.svg';
 
 export default function SignIn() {
@@ -47,22 +48,66 @@ export default function SignIn() {
 
 	const {trigger} = useSWRMutation('api/users/signIn', fetcher);
 
-	const handleSuccess = (data: {id: any; name: any; email: any; phone: any; token: any}) => {
+	async function getUserData() {
+		await fetch('api/users/me', {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+			},
+		})
+			.then(async response => response.json())
+			.then(json => {
+				dispatch(updateUser({
+					id: json.data.id,
+					name: json.data.name,
+					email: json.data.email,
+					phone: json.data.phone,
+				}));
+			});
+	}
+
+	async function getUserCoupon() {
+		await fetch('api/buyers/me/coupons', {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+			},
+		})
+			.then(async response => response.json())
+			.then(json => {
+				dispatch(updateBuyerCoupons({
+					buyerCoupons: json.data,
+				}));
+			});
+		await fetch('api/sellers/me/coupons', {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+			},
+		})
+			.then(async response => response.json())
+			.then(json => {
+				dispatch(updateSellerCoupons({
+					sellerCoupons: json.data,
+				}));
+			});
+	}
+
+	const handleSuccess = async (data: {id: any; name: any; email: any; phone: any; token: any}) => {
 		dispatch(
 			login({
 				id: data.id,
-				name: data.name,
-				email: data.email,
-				phone: data.phone,
 				token: data.token,
 			}),
 		);
+		await getUserData();
+		await getUserCoupon();
 		router.push('/');
 	};
 
 	const onFormSubmit = async values => {
 		await trigger(values, {
-			onSuccess(response) {
+			async onSuccess(response) {
 				if (response.status === 0) {
 					toast({
 						description: 'Sign in successfully!',
@@ -71,7 +116,7 @@ export default function SignIn() {
 						isClosable: true,
 						position: 'bottom',
 					});
-					handleSuccess(response.data);
+					await handleSuccess(response.data);
 				} else {
 					toast({
 						description: 'This email address is not registered, or the password is incorrect.',
@@ -125,7 +170,7 @@ export default function SignIn() {
 								<Input type='password' id='password'
 									{...register('password', {
 										required: 'required',
-										minLength: {value: 6, message: 'Password must be at least 6 characters long'},
+										minLength: {value: 5, message: 'Password must be at least 5 characters long'},
 									})}/>
 							</FormControl>
 							<Stack spacing={10}>

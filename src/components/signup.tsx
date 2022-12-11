@@ -133,7 +133,7 @@ export default function SignUp() {
 								<Input type='password' id='password'
 									{...register('password', {
 										required: 'required',
-										minLength: {value: 6, message: 'Password must be at least 6 characters long'},
+										minLength: {value: 5, message: 'Password must be at least 5 characters long'},
 									})}/>
 							</FormControl>
 							<Stack spacing={10}>
