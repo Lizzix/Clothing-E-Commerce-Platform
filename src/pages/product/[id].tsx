@@ -6,14 +6,15 @@ import {
 } from '@chakra-ui/react';
 import {useRouter} from 'next/router';
 import useSWR from 'swr';
-import OrderItemDetailCard from '../../components/item-detail-card';
+import ProductDetailCard from '../../components/product-detail-card';
 import Loading from '../../components/loading';
 
-export default function ItemPage() {
+export default function ProductPage() {
 	const router = useRouter();
 	const [isSmallerThan850] = useMediaQuery('(max-width: 850px)');
 	const fetcher = async (url: RequestInfo | URL) => fetch(url).then(async response => response.json());
-	const {data, isLoading} = useSWR('/api/products/' + String(router.query.id), fetcher);
+	const url = '/api/products/' + String(router.query.id);
+	const {data, isLoading} = useSWR(url, fetcher);
 
 	if (isLoading) {
 		return (<Loading />);
@@ -28,7 +29,7 @@ export default function ItemPage() {
 				boxShadow={'lg'}
 				py={10}
 				px={8}>
-				<OrderItemDetailCard item={data?.data} variant={isSmallerThan850}/>
+				<ProductDetailCard item={data?.data} variant={isSmallerThan850}/>
 			</Box>
 		</Flex>
 	);

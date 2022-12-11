@@ -1,4 +1,4 @@
-import {configureStore,getDefaultMiddleware} from '@reduxjs/toolkit';
+import {configureStore, combineReducers} from '@reduxjs/toolkit';
 import {setupListeners} from '@reduxjs/toolkit/dist/query';
 import {
 	persistStore,
@@ -12,23 +12,30 @@ import {
   } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import userReducer from './user-slice';
+import productReducer from './product-slice';
 
 const persistConfig = {
 	key: 'root',
 	storage: AsyncStorage,
 };
 
-const persistedReducer = persistReducer(persistConfig, userReducer);
+const rootReducer = combineReducers({
+	user: userReducer,
+	product: productReducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 let mainReducer;
 if (typeof window !== "undefined") {
 	mainReducer = persistedReducer;
 } else {
-	mainReducer = userReducer;
+	mainReducer = rootReducer;
 }
 const store = configureStore({
 	reducer: {
 		user: mainReducer,
+		product: mainReducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 	getDefaultMiddleware({
