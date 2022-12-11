@@ -4,31 +4,32 @@ import {
 	Thead,
 	Tr,
 	Th,
+	Td,
 	Tbody,
 } from '@chakra-ui/react';
 
 export default function CouponTable(props) {
-	const coupons = props.coupon;
+	const coupons = props.coupons;
 	if (props.variant) {
 		return (
 			<TableContainer>
 				<Table variant='simple' minWidth={'330px'}>
-					{coupons.map(coupon => (
+					{coupons?.map(coupon => (
 						<>
 							<Thead>
-								<Tr key={coupon.id}>
+								<Tr key={String(coupon.name) + '-body'}>
 									<Th fontSize={'md'} bgColor={'gray.100'}>{coupon.name}</Th>
 								</Tr>
 							</Thead>
 							<Tbody>
-								<Tr>
-									<Th>{coupon.type}</Th>
+								<Tr key={String(coupon.type) + '-body'}>
+									<Td>{coupon.type}</Td>
 								</Tr>
-								<Tr>
-									<Th>{coupon.scope}</Th>
+								<Tr key={String(coupon.scope) + '-body'}>
+									<Td>{coupon.scope}</Td>
 								</Tr>
-								<Tr>
-									<Th>{coupon.endAt.split('T')[0]}</Th>
+								<Tr key={String(coupon.endAt) + '-body'}>
+									<Td>{coupon.endAt.split('T')[0]}</Td>
 								</Tr>
 							</Tbody>
 						</>
@@ -42,7 +43,7 @@ export default function CouponTable(props) {
 		<TableContainer>
 			<Table variant='simple'>
 				<Thead>
-					<Tr>
+					<Tr key={'head'}>
 						<Th fontSize={'sm'} bgColor={'gray.100'}>Coupon Name</Th>
 						<Th fontSize={'sm'} bgColor={'gray.100'}>Type</Th>
 						<Th fontSize={'sm'} bgColor={'gray.100'}>Scope</Th>
@@ -50,12 +51,12 @@ export default function CouponTable(props) {
 					</Tr>
 				</Thead>
 				<Tbody>
-					{coupons.map(coupon => (
+					{coupons?.map(coupon => (
 						<Tr key={coupon.id}>
-							<Th>{coupon.name}</Th>
-							<Th>{coupon.type}</Th>
-							<Th>{coupon.scope}</Th>
-							<Th>{coupon.endAt.split('T')[0]}</Th>
+							<Td fontSize={'sm'}>{coupon.name}</Td>
+							<Td fontSize={'sm'}>{coupon.type}</Td>
+							<Td fontSize={'sm'}>{coupon.scope}</Td>
+							<Td fontSize={'sm'}>{coupon.endAt.split('T')[0]}</Td>
 						</Tr>
 					))}
 				</Tbody>

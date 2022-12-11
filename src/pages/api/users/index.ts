@@ -37,7 +37,6 @@ export default async function handle(
 					}
 				});
 			} catch (err) {
-				// console.log(err);
 				return res.status(200).json({
 					status: 1,
 					message: "user already exists",

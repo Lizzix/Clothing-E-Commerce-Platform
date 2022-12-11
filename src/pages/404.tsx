@@ -34,7 +34,7 @@ export default function Custom404() {
 					<Center>
 						<Image src={Lost.src} alt='Page Not Found' boxSize='300px' />
 					</Center>
-					<Button bg={'blue.400'} _hover={{bg: 'blue.500'}} as={NextLink} href='/'>Go to front page</Button>
+					<Button color={'white'} bg={'blue.400'} _hover={{bg: 'blue.500'}} as={NextLink} href='/'>Go to front page</Button>
 				</Stack>
 			</Stack>
 		</Flex>

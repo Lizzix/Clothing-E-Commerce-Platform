@@ -301,7 +301,7 @@ const UserMobileNavItem: NavItem[] = [
 		]},
 	{
 		label: 'Logout',
-		href: '/api/logout',
+		href: '/',
 	},
 ];
 
