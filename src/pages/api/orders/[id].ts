@@ -7,10 +7,11 @@ const STATUS = ['CHECKING', 'ESTABLISHED', 'DEALING', 'SENDED', 'FINISHED', 'CAN
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 	// TODO:
 	if (req.method === 'GET') {
-		const id = req.body.id;
+		const id = req.query.id;
 		handleGET(id, res);
 	} else if (req.method == "PATCH") {
-		const { id, status } = req.body;
+		const id = req.query.id;
+		const status = req.body.status;
 		if (!STATUS.includes(status as string)) {
 			res.json({
 				status: 1,
@@ -40,9 +41,28 @@ export async function handleGET(id: string | string[], res: NextApiResponse<any>
 			message: 'order does not exist'
 		});
 	} else {
-		const items = await prisma.order_Item.findMany({
-			where: { orderId: Number(id) },
+		const order_item_infos = await prisma.order_Item.findMany({
+			where: { orderId: order.id },
 		});
+		let items = [];
+		for (const i of order_item_infos) {
+			const product_info = await prisma.product.findUnique({
+				where: { id: i.productId },
+			});
+			const variation_info = await prisma.variation.findUnique({
+				where: { id: i.variationId },
+			});
+			items.push({
+				productId: i.productId,
+				name: product_info.name,
+				description: product_info.description,
+				picture: product_info.picture,
+				color: variation_info.colorName,
+				size: variation_info.sizeName,
+				price: product_info.price,
+				amount: i.quantity,
+			})
+		}
 		res.json({
 			status: 0,
 			message: "success",

@@ -12,9 +12,28 @@ export default authenticated(async function handle(req: NextApiRequest, res: Nex
 		});
 		let order_list = [];
 		for (const o of orders) {
-			const items = await prisma.order_Item.findMany({
+			const order_item_infos = await prisma.order_Item.findMany({
 				where: { orderId: o.id },
 			});
+			let items = [];
+			for (const i of order_item_infos) {
+				const product_info = await prisma.product.findUnique({
+					where: { id: i.productId },
+				});
+				const variation_info = await prisma.variation.findUnique({
+					where: { id: i.variationId },
+				});
+				items.push({
+					productId: i.productId,
+					name: product_info.name,
+					description: product_info.description,
+					picture: product_info.picture,
+					color: variation_info.colorName,
+					size: variation_info.sizeName,
+					price: product_info.price,
+					amount: i.quantity,
+				})
+			}
 			order_list.push({
 				id: o.id,
 				items: items,

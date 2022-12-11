@@ -2,9 +2,10 @@ import type {NextApiRequest, NextApiResponse} from 'next';
 import prisma from '../../../lib/prisma';
 
 // PATCH /api/activities/:id (Update the activity)
-export default async function handle(request: NextApiRequest, res: NextApiResponse) {
-	const {id, available} = request.body;
-	if (request.method === 'PATCH') {
+export default async function handle(req: NextApiRequest, res: NextApiResponse) {
+	const id = req.query.id;
+	const available = req.body.available;
+	if (req.method === 'PATCH') {
 		const test = await prisma.discount.findUnique({
 			where: {id: Number(id)},
 		});
@@ -37,7 +38,7 @@ export default async function handle(request: NextApiRequest, res: NextApiRespon
 		});
 	} else {
 		throw new Error(
-			`The HTTP ${request.method} method is not supported at this route.`,
+			`The HTTP ${req.method} method is not supported at this route.`,
 		);
 	}
 }

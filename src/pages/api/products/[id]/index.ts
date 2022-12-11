@@ -5,10 +5,11 @@ import prisma from '../../../../lib/prisma';
 // PATCH /api/products/:id (Update the product)
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method === "GET") {
-		const id = req.body.id;
+		const id = req.query.id;
 		handleGET(id, res);
 	} else if (req.method === "PATCH") {
-		const { id, available } = req.body;
+		const id = req.query.id;
+		const available = req.body.available;
 		const product = await prisma.product.findUnique({
 			where: { id: Number(id), },
 		});
