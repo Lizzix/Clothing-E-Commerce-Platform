@@ -60,13 +60,12 @@ model Product {
   picture     String
   price       Int
   available   Boolean
-  isOnSale    Boolean
   startAt     DateTime
   endAt       DateTime
   sellerId    Int
-  User        User         @relation(fields: [sellerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Discount    Discount[]
   Order_Item  Order_Item[]
+  User        User         @relation(fields: [sellerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Variation   Variation[]
 }
 
@@ -101,6 +100,6 @@ model Variation {
   sizeId     Int
   sizeName   String
   inventory  Int
-  Product    Product      @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Order_Item Order_Item[]
+  Product    Product      @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }

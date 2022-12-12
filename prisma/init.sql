@@ -25,7 +25,6 @@ CREATE TABLE `Product`(
 	picture 		VARCHAR(128) 	NOT NULL,
 	price 			INTEGER			NOT NULL,
 	available 		BOOLEAN			NOT NULL,
-	isOnSale 		BOOLEAN			NOT NULL,
 	startAt 		TIMESTAMP		NOT NULL,
 	endAt 			TIMESTAMP		NOT NULL,
 	sellerId		INTEGER			NOT NULL,

@@ -41,7 +41,6 @@ export default authenticated(async function handle(req: NextApiRequest, res: Nex
 				description: description,
 				picture: picture,
 				price: price,
-				isOnSale: false,
 				available: available,
 				startAt: new Date(startAt),
 				endAt: new Date(endAt),
