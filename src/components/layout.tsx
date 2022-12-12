@@ -403,13 +403,13 @@ const NAV_ITEMS: NavItem[] = [
 		label: 'Clothing',
 		children: [
 			{
-				label: 'Job Board',
-				subLabel: 'Find your dream design job',
+				label: 'Hot Right Now',
+				subLabel: 'Find your dream outfit',
 				href: '#',
 			},
 			{
-				label: 'Freelance Projects',
-				subLabel: 'An exclusive list for contract work',
+				label: 'Exclusive Collection',
+				subLabel: 'An exclusive list for cool kids like you',
 				href: '#',
 			},
 		],

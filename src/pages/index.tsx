@@ -30,17 +30,12 @@ export default function Home() {
 					{products?.map(product => (<ProductCard product={product} />))}
 				</Flex>
 				<Icon as={GiSpaceship} boxSize={6} />
-				<Heading>Best Selling</Heading>
+				<Heading as='ins'>Best Selling</Heading>
 				<Flex align={'start'} justify={'center'} flexWrap={'wrap'}>
 					{products?.map(product => (<ProductCard product={product} />))}
 				</Flex>
 				<Icon as={GiSpaceship} boxSize={6} />
-				<Heading>Hot Right Now</Heading>
-				<Flex align={'start'} justify={'center'} flexWrap={'wrap'}>
-					{products?.map(product => (<ProductCard product={product} />))}
-				</Flex>
-				<Icon as={GiSpaceship} boxSize={6} />
-				<Heading>Fresh Restocks</Heading>
+				<Heading as='ins'>Fresh Restocks</Heading>
 				<Flex align={'start'} justify={'center'} flexWrap={'wrap'}>
 					{products?.map(product => (<ProductCard product={product} />))}
 				</Flex>
