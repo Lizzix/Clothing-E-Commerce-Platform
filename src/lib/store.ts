@@ -19,10 +19,12 @@ const persistConfig = {
 	storage: AsyncStorage,
 };
 
-const rootReducer = combineReducers({
-	user: userReducer,
-	product: productReducer,
-});
+// const rootReducer = combineReducers({
+// 	user: userReducer,
+// 	product: productReducer,
+// });
+
+const rootReducer = userReducer;
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
