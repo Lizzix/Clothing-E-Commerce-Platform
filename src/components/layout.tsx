@@ -186,7 +186,6 @@ export default function Layout(props) {
 								fontWeight={400}
 								variant={'link'}
 								href={'/login'}>
-								{/* CHECK: handle routing on upper level */}
 							Sign In
 							</Button>
 						)}
@@ -382,7 +381,6 @@ type NavItem = {
 	href?: string;
 };
 
-// TODO: navbar items
 const NAV_ITEMS: NavItem[] = [
 	{
 		label: 'What\'s New',

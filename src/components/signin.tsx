@@ -183,10 +183,10 @@ export default function SignIn() {
 				<Heading fontSize={'4xl'}>Sign in</Heading>
 				<Image src={Launching.src} alt='launching' boxSize='280px' />
 				<Box
-					rounded={'md'}
+					rounded={'lg'}
 					bg={useColorModeValue('white', 'gray.700')}
 					boxShadow={'lg'}
-					p={3}>
+					p={8}>
 					<form onSubmit={handleSubmit(onFormSubmit)}>
 						<Stack spacing={4} minWidth={'340px'}>
 							<FormControl id='email' isInvalid={errors?.email?.message?.length === 0}>

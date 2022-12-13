@@ -44,7 +44,7 @@ export default function CouponTable(props) {
 			<Table variant='simple'>
 				<Thead>
 					<Tr key={'head'}>
-						<Th fontSize={'sm'} bgColor={'gray.100'}>Coupon Name</Th>
+						<Th fontSize={'sm'} bgColor={'gray.100'}>Name</Th>
 						<Th fontSize={'sm'} bgColor={'gray.100'}>Type</Th>
 						<Th fontSize={'sm'} bgColor={'gray.100'}>Scope</Th>
 						<Th fontSize={'sm'} bgColor={'gray.100'}>Expiry Date</Th>
