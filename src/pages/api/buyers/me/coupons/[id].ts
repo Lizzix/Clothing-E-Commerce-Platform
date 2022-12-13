@@ -7,7 +7,7 @@ import authenticated from '../../../../../components/authenticate';
 export default authenticated(async function handle(req: NextApiRequest, res: NextApiResponse) {
 	// TODO: update for me
 	if (req.method === 'POST') {
-		const coupon_id = req.body.couponId;
+		const coupon_id = req.query.id;
 		const coupon = await prisma.discount.findMany({
 			where: { id: Number(coupon_id), format: "COUPON" },
 		});
